@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" ng-app="todoApp" data-framework="angularjs">
+  <head> 
+    <title>Angular Todo List</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+    <script src="js/todoCtrl.js"></script>
+  </head>
+  <body class="container">
+    <h1> {{ name }} </h1>
+    
+    <div class="col-md-12" ng-controller="TodoController">
+      <div class="col-md-4">
+        <h3>Add new Todo:</h3>
+        <input type="text" ng-model="newTodo">
+        <button type="button" class="btn btn-primary btn-sm" ng-click="addTodo()">Add</button>     
+      </div>
+      <div class="col-md-4">
+        <h3>Pending Todos</h3>
+        <div ng-repeat="item in todos | filter:done = false">
+          <div>
+            {{ item.name }} <button type="button" class="btn btn-danger btn-xs" ng-click="deleteTodo(item)"><span class="glyphicon glyphicon-minus-sign"></span></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <h3>Complete Todos</h3>
+        <div ng-repeat="item in todos | filter:done = true">
+          <div>
+            {{ item.name }} <button type="button" class="btn btn-danger btn-xs" ng-click="deleteTodo(item)"><span class="glyphicon glyphicon-minus-sign"></span></button>
+          </div>
+        </div>
+      </div>
+        
+      
+      
+    </div>
+  </body>
+</html>
