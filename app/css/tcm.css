@@ -42,9 +42,13 @@ td {
     padding: 4px;
 }
 
-.row-label, .column-label {
+.column-label, .category-label {
     background-color: #ddd;
     font-weight: bold
+}
+
+.category-label {
+    font-size: 140%;
 }
 
 textarea {

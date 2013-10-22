@@ -12,8 +12,14 @@
   <body class="container" ng-controller="sheet">
     <div class="row">
       <div class="col-md-12">
-      <h2>Test Plan</h2>
+        <h2>Test Plan</h2>
+
         <table class="table table-hover">
+          <tr class="category-label">
+            <td colspan="5">
+              Category
+            </td>
+          </tr>
           <tr class="column-label">
             <td></td>
             <td ng-repeat="col in cols">{{col}}</td>
@@ -24,33 +30,53 @@
             <td> <textarea ng-model="step.action" ng-disabled="mode!='edit'">{{step.action}}</textarea> </td>
             <td> <textarea ng-model="step.outcome" ng-disabled="mode!='edit'">{{step.outcome}}</textarea> </td>
             <td>
-              <a ng-click="setResult(step, 'success')"><i class="icon-thumbs-up-alt"></i></a>
-              <a ng-click="setResult(step, 'danger')"><i class="icon-thumbs-down-alt"></i></a>
-              <a ng-click="setResult(step, '')"><i class="icon-undo"></i></a>
-              <a ng-click="removeStep(step)"><i class="icon-trash"></i></a>
+              <div ng-show="mode == 'run'">
+                <a ng-click="setResult(step, 'success')"><i class="icon-thumbs-up-alt"></i></a>
+                <a ng-click="setResult(step, 'danger')"><i class="icon-thumbs-down-alt"></i></a>
+                <a ng-click="setResult(step, '')"><i class="icon-undo"></i></a>
+                <a ng-click="removeStep(step)"><i class="icon-trash"></i></a>
+              </div>
             </td>
           </tr>
         </table>
+        <button class="btn btn-default pull-right" ng-show="mode=='edit'" ng-click="saveTestPlan">Save Test Plan</button>
+        <button class="btn btn-default pull-right" ng-show="mode=='run'">Save Test Results</button>
       </div>
     </div>
       
     <div class="row">
       <div class="col-md-4">
-        <h2>Set Mode</h2>
-        <p>
-          Set the mode of the test plan.  Edit is used for creating/modifying an existing test plan.  Run is used for tracking the runs.
-        </p>
+        <h2>Settings</h2>
+        <hr />
+        
+        <h3>Mode</h3>
         <button class="btn btn-default" ng-click="setMode('edit')">Edit</button>
         <button class="btn btn-default" ng-click="setMode('run')">Run</button>
+        <hr />
+        
+        <h3>Format</h3>
+        <select ng-model="testCaseFormat" class="form-control">
+          <option>Wiki</option>
+          <option>JIRA</option>
+          <option>CSV</option>
+        </select>
       </div>
 
       <div class="col-md-4">
         <h2>Test Cases</h2>
-        <p>
-          Simulating adding a new test case.
-        </p>
-        <button class="btn btn-success" ng-click="addStep()">Add Step</button>
+        <button class="btn btn-info" ng-click="addStep()">Add Test Step</button>
+        <hr />
+        <button class="btn btn-warning" ng-click="setResultAll('')">Reset All</button>
+        <button class="btn btn-success" ng-click="setResultAll('success')">Pass All</button>
+        <button class="btn btn-danger" ng-click="setResultAll('danger')">Fail All</button>
       </div>
+      
+      <div class="col-md-4">
+        <h2>Results</h2>
+      </div>
+      <textarea ng-model="results">
+        
+      </textarea>
     </div>      
 
     <!-- Scripts and includes -->

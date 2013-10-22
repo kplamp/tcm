@@ -3,6 +3,8 @@ var tcm = angular.module('tcm');
 tcm.controller('sheet', function($scope) {
   
   $scope.mode = 'edit';
+  $scope.format = '';
+  $scope.results = '';
 
   $scope.cols = ['Setup','Action','Expected Outcome','Result'];
   
@@ -48,4 +50,15 @@ tcm.controller('sheet', function($scope) {
     console.log(item);
     $scope.testSteps.splice($scope.testSteps.indexOf(item), 1);
   };
+  
+  $scope.setResultAll = function(result) {
+    for(i=0; i<$scope.testSteps.length; i++) {
+      $scope.testSteps[i].result = result;
+    };
+  };
+  
+  $scope.saveTestPlan = function() {
+    console.log("test");
+    $scope.results = $scope.testSteps;
+  }
 });
