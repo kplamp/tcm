@@ -4,8 +4,8 @@
     <title>Angular Test Case Manager</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <!--<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">-->
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <!--<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">-->
     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" href="css/tcm.css">
   </head>
@@ -24,9 +24,9 @@
             <td> <textarea ng-model="step.action" ng-disabled="mode!='edit'">{{step.action}}</textarea> </td>
             <td> <textarea ng-model="step.outcome" ng-disabled="mode!='edit'">{{step.outcome}}</textarea> </td>
             <td>
-              <i class="icon-thumbs-up-alt"></i>
-              <i class="icon-thumbs-down-alt"></i>
-              <i class="icon-undo"></i>
+              <a ng-click="setResult(step, 'success')"><i class="icon-thumbs-up-alt"></i></a>
+              <a ng-click="setResult(step, 'danger')"><i class="icon-thumbs-down-alt"></i></a>
+              <a ng-click="setResult(step, '')"><i class="icon-undo"></i></a>
               <a ng-click="removeStep(step)"><i class="icon-trash"></i></a>
             </td>
           </tr>
@@ -37,12 +37,18 @@
     <div class="row">
       <div class="col-md-4">
         <h2>Set Mode</h2>
-        <button ng-click="setMode('edit')">Edit</button>
-        <button ng-click="setMode('run')">Run</button>
+        <p>
+          Set the mode of the test plan.  Edit is used for creating/modifying an existing test plan.  Run is used for tracking the runs.
+        </p>
+        <button class="btn btn-default" ng-click="setMode('edit')">Edit</button>
+        <button class="btn btn-default" ng-click="setMode('run')">Run</button>
       </div>
 
       <div class="col-md-4">
-        <h2>Rows</h2>
+        <h2>Test Cases</h2>
+        <p>
+          Simulating adding a new test case.
+        </p>
         <button class="btn btn-success" ng-click="addStep()">Add Step</button>
       </div>
     </div>      

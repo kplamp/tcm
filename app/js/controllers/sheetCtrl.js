@@ -12,21 +12,21 @@ tcm.controller('sheet', function($scope) {
       setup: "test",
       action: "test",
       outcome: "test",
-      result: 'success'
+      result: ''
     },
     {
       id: 2,
       setup: "test2",
       action: "test2",
       outcome: "test2",
-      result: 'success'
+      result: ''
     },
     {
       id: 3,
       setup: "test3",
       action: "test3",
       outcome: "test3",
-      result: 'danger'
+      result: ''
     }
   ];
   
@@ -34,9 +34,10 @@ tcm.controller('sheet', function($scope) {
     $scope.mode = mode;
   };
   
-  $scope.setResult = function(row, col, result) {
-    console.log('Case: ' + row + ' ' + col);
-    console.log('Result: ' + result);
+  $scope.setResult = function(item, result) {
+    
+    var index = $scope.testSteps.indexOf(item);
+    $scope.testSteps[index].result = result;
   };
   
   $scope.addStep = function() {
@@ -44,6 +45,7 @@ tcm.controller('sheet', function($scope) {
   };
   
   $scope.removeStep = function(item) {
+    console.log(item);
     $scope.testSteps.splice($scope.testSteps.indexOf(item), 1);
   };
 });
