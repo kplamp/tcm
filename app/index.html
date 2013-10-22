@@ -1,41 +1,57 @@
 <!doctype html>
-<html lang="en" ng-app="todoApp" data-framework="angularjs">
+<html ng-app="tcm" ang="en" data-framework="angularjs">
   <head> 
-    <title>Angular Todo List</title>
+    <title>Angular Test Case Manager</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
-    <script src="js/todoCtrl.js"></script>
+    <!--<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">-->
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/tcm.css">
   </head>
-  <body class="container">
-    <h1> {{ name }} </h1>
-    
-    <div class="col-md-12" ng-controller="TodoController">
-      <div class="col-md-4">
-        <h3>Add new Todo:</h3>
-        <input type="text" ng-model="newTodo">
-        <button type="button" class="btn btn-primary btn-sm" ng-click="addTodo()">Add</button>     
+  <body class="container" ng-controller="sheet">
+    <div class="row">
+      <div class="col-md-12">
+      <h2>Test Plan</h2>
+        <table class="table table-hover">
+          <tr class="column-label">
+            <td></td>
+            <td ng-repeat="col in cols">{{col}}</td>
+          </tr>
+          <tr ng-repeat="step in testSteps" class="{{step.result}}">
+            <td>{{$index + 1}}</td>
+            <td> <textarea ng-model="step.setup" ng-disabled="mode!='edit'">{{step.setup}}</textarea> </td>
+            <td> <textarea ng-model="step.action" ng-disabled="mode!='edit'">{{step.action}}</textarea> </td>
+            <td> <textarea ng-model="step.outcome" ng-disabled="mode!='edit'">{{step.outcome}}</textarea> </td>
+            <td>
+              <i class="icon-thumbs-up-alt"></i>
+              <i class="icon-thumbs-down-alt"></i>
+              <i class="icon-undo"></i>
+              <a ng-click="removeStep(step)"><i class="icon-trash"></i></a>
+            </td>
+          </tr>
+        </table>
       </div>
-      <div class="col-md-4">
-        <h3>Pending Todos</h3>
-        <div ng-repeat="item in todos | filter:done = false">
-          <div>
-            {{ item.name }} <button type="button" class="btn btn-danger btn-xs" ng-click="deleteTodo(item)"><span class="glyphicon glyphicon-minus-sign"></span></button>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <h3>Complete Todos</h3>
-        <div ng-repeat="item in todos | filter:done = true">
-          <div>
-            {{ item.name }} <button type="button" class="btn btn-danger btn-xs" ng-click="deleteTodo(item)"><span class="glyphicon glyphicon-minus-sign"></span></button>
-          </div>
-        </div>
-      </div>
-        
-      
-      
     </div>
+      
+    <div class="row">
+      <div class="col-md-4">
+        <h2>Set Mode</h2>
+        <button ng-click="setMode('edit')">Edit</button>
+        <button ng-click="setMode('run')">Run</button>
+      </div>
+
+      <div class="col-md-4">
+        <h2>Rows</h2>
+        <button class="btn btn-success" ng-click="addStep()">Add Step</button>
+      </div>
+    </div>      
+
+    <!-- Scripts and includes -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers/sheetCtrl.js"></script>
   </body>
 </html>
