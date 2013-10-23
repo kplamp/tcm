@@ -1,64 +1,78 @@
 var tcm = angular.module('tcm');
 
-tcm.controller('sheet', function($scope) {
+tcm.controller('testPlanCtrl', function($scope) {
   
+	var steps = [
+		{
+			setup: "1. View only and modifiable security is disabled for maintaining the purge prevention checkbox.",
+			action: "1. Close the problem report\n2. Update some junk",
+			outcome: "test",
+			result: ''
+		},
+		{
+			setup: "test2",
+			action: "test2",
+			outcome: "test2",
+			result: ''
+		},
+		{
+			setup: "test3",
+			action: "test3",
+			outcome: "test3",
+			result: ''
+		}
+	];
+	
+	var steps2 = [
+		{
+			setup: "Junk",
+			action: "1. Close the problem report\n2. Update some junk",
+			outcome: "test",
+			result: ''
+		}
+	];
+	
   $scope.mode = 'edit';
   $scope.format = '';
   $scope.results = '';
-
   $scope.cols = ['Setup','Action','Expected Outcome','Result'];
-  
-  $scope.testSteps = [
-    {
-      id: 1,
-      setup: "test",
-      action: "test",
-      outcome: "test",
-      result: ''
-    },
-    {
-      id: 2,
-      setup: "test2",
-      action: "test2",
-      outcome: "test2",
-      result: ''
-    },
-    {
-      id: 3,
-      setup: "test3",
-      action: "test3",
-      outcome: "test3",
-      result: ''
-    }
-  ];
-  
+  $scope.testPlan = [];
+  $scope.testPlan.category = [];
+	
+	$scope.testPlan.push({name: "Category 1", testSteps: steps});
+	$scope.testPlan.push({name: "Category 2", testSteps: steps2});
+	
   $scope.setMode = function(mode) {
     $scope.mode = mode;
   };
   
-  $scope.setResult = function(item, result) {
-    
-    var index = $scope.testSteps.indexOf(item);
-    $scope.testSteps[index].result = result;
+  $scope.setResult = function(category, step, result) {
+		$scope.testPlan[category].testSteps[step].result = result;
   };
   
-  $scope.addStep = function() {
-    $scope.testSteps.push({setup: '', action: '', outcome: ''});
+  $scope.addStep = function(index) {
+		$scope.testPlan[index].testSteps.push({setup: '', action: '', outcome: ''});
   };
+	
+	$scope.addCategory = function() {
+		$scope.testPlan.push({name: "Test", testSteps: []});
+	};
   
-  $scope.removeStep = function(item) {
-    console.log(item);
-    $scope.testSteps.splice($scope.testSteps.indexOf(item), 1);
+  $scope.removeStep = function(category, step) {
+		$scope.testPlan[category].testSteps.splice(step, 1);
   };
+	
+	$scope.removeCategory = function(category) {
+		$scope.testPlan.splice(category, 1);
+	}
   
   $scope.setResultAll = function(result) {
-    for(i=0; i<$scope.testSteps.length; i++) {
-      $scope.testSteps[i].result = result;
+    for(i=0; i<$scope.testPlan.length; i++) {
+      $scope.testPlan.testSteps[i].result = result;
     };
   };
   
   $scope.saveTestPlan = function() {
-    console.log("test");
-    $scope.results = $scope.testSteps;
-  }
+    $scope.results = angular.toJson($scope.testPlan, true);
+  };
 });

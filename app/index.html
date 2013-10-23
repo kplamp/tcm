@@ -9,76 +9,86 @@
     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" href="css/tcm.css">
   </head>
-  <body class="container" ng-controller="sheet">
+  <body class="container" ng-controller="testPlanCtrl">
     <div class="row">
       <div class="col-md-12">
         <h2>Test Plan</h2>
-
-        <table class="table table-hover">
-          <tr class="category-label">
-            <td colspan="5">
-              Category
-            </td>
-          </tr>
-          <tr class="column-label">
-            <td></td>
-            <td ng-repeat="col in cols">{{col}}</td>
-          </tr>
-          <tr ng-repeat="step in testSteps" class="{{step.result}}">
-            <td>{{$index + 1}}</td>
-            <td> <textarea ng-model="step.setup" ng-disabled="mode!='edit'">{{step.setup}}</textarea> </td>
-            <td> <textarea ng-model="step.action" ng-disabled="mode!='edit'">{{step.action}}</textarea> </td>
-            <td> <textarea ng-model="step.outcome" ng-disabled="mode!='edit'">{{step.outcome}}</textarea> </td>
-            <td>
-              <div ng-show="mode == 'run'">
-                <a ng-click="setResult(step, 'success')"><i class="icon-thumbs-up-alt"></i></a>
-                <a ng-click="setResult(step, 'danger')"><i class="icon-thumbs-down-alt"></i></a>
-                <a ng-click="setResult(step, '')"><i class="icon-undo"></i></a>
-                <a ng-click="removeStep(step)"><i class="icon-trash"></i></a>
-              </div>
-            </td>
-          </tr>
-        </table>
-        <button class="btn btn-default pull-right" ng-show="mode=='edit'" ng-click="saveTestPlan">Save Test Plan</button>
+        <div ng-repeat="section in testPlan">
+          <table class="table table-hover">
+            <tr class="category-label">
+              <td colspan="5">
+                {{ categoryIdx = $index }}
+                {{ section.name }} <span class="pull-right"><button class="btn btn-xs btn-danger" ng-click="removeCategory(categoryIdx)"><i class="icon-trash"></i></button>
+              </td>
+            </tr>
+            <tr class="column-label">
+              <td></td>
+              <td ng-repeat="col in cols">{{col}}</td>
+            </tr>
+            <tr ng-repeat="step in section.testSteps" class="{{step.result}}">
+              <td> {{ $index + 1 }} </td>
+              <td> <textarea ng-model="step.setup" ng-disabled="mode!='edit'" placeholder="Setup Information">{{step.setup}}</textarea> </td>
+              <td> <textarea ng-model="step.action" ng-disabled="mode!='edit'" placeholder="Actions Taken">{{step.action}}</textarea> </td>
+              <td> <textarea ng-model="step.outcome" ng-disabled="mode!='edit'" placeholder="Expected Results">{{step.outcome}}</textarea> </td>
+              <td>
+                <div>
+                  <div ng-show="step.outcome!='' && mode=='run'">
+                    <a ng-click="setResult(categoryIdx, $index, 'success')" ><i class="icon-thumbs-up-alt"></i></a>
+                    <a ng-click="setResult(categoryIdx, $index, 'danger')"><i class="icon-thumbs-down-alt"></i></a>
+                    <a ng-click="setResult(categoryIdx, $index, '')"><i class="icon-undo"></i></a>
+                  </div>
+                  <a ng-click="removeStep(categoryIdx, $index)"><i class="icon-trash"></i></a>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <button class="btn btn-default pull-right" ng-click="addStep($index)">Add Test Step</button>
+          <br />
+          <br />
+        </div>
+          
+        <button class="btn btn-default pull-right" ng-click="saveTestPlan()" ng-show="mode=='edit'">Save Test Plan</button>
+        <button class="btn btn-default pull-right" ng-click="addCategory()">Add Category</button>
         <button class="btn btn-default pull-right" ng-show="mode=='run'">Save Test Results</button>
       </div>
     </div>
-      
+    
     <div class="row">
       <div class="col-md-4">
         <h2>Settings</h2>
-        <hr />
-        
+          
+          
+          
         <h3>Mode</h3>
         <button class="btn btn-default" ng-click="setMode('edit')">Edit</button>
         <button class="btn btn-default" ng-click="setMode('run')">Run</button>
-        <hr />
+          
+        <div ng-show="mode=='run'">
+          <hr />
+          <button class="btn btn-default" ng-click="setResultAll('')">Reset All</button>
+          <button class="btn btn-success" ng-click="setResultAll('success')">Pass All</button>
+          <button class="btn btn-danger" ng-click="setResultAll('danger')">Fail All</button>
+        </div>
+          
+      </div>
         
+      <div class="col-md-4">
+      </div>
+        
+      <div class="col-md-8">
+        <h2>Results</h2>
         <h3>Format</h3>
         <select ng-model="testCaseFormat" class="form-control">
           <option>Wiki</option>
           <option>JIRA</option>
-          <option>CSV</option>
+          <option>YAML</option>
         </select>
-      </div>
-
-      <div class="col-md-4">
-        <h2>Test Cases</h2>
-        <button class="btn btn-info" ng-click="addStep()">Add Test Step</button>
         <hr />
-        <button class="btn btn-warning" ng-click="setResultAll('')">Reset All</button>
-        <button class="btn btn-success" ng-click="setResultAll('success')">Pass All</button>
-        <button class="btn btn-danger" ng-click="setResultAll('danger')">Fail All</button>
+        <textarea class="form-control" ng-model="results" placeholder="Test Plan Formatted"></textarea>
       </div>
-      
-      <div class="col-md-4">
-        <h2>Results</h2>
-      </div>
-      <textarea ng-model="results">
         
-      </textarea>
     </div>      
-
+      
     <!-- Scripts and includes -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
