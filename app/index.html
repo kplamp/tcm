@@ -10,15 +10,33 @@
     <link rel="stylesheet" href="css/tcm.css">
   </head>
   <body class="container" ng-controller="testPlanCtrl">
-    <div class="row">
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="navbar-header">
+        <a class="navbar-brand">PRSR</a>
+      </div>
+      <ul class="nav navbar-nav menu-group">
+        <li><button class="btn btn-default pull-right navbar-btn btn-sm" ng-click="addCategory()">Add Category</button></li>
+        <li></li>
+      </ul>
+      <ul class="nav navbar-nav menu-group">
+        <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setMode('edit')">Edit</button></li>
+        <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setMode('run')">Run</button></li>
+      </ul>
+      <ul class="nav navbar-nav menu-group" ng-show="mode=='run'">
+        <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setResultAll('')">Reset All</button></li>
+        <li><button class="btn btn-success navbar-btn btn-sm" ng-click="setResultAll('success')">Pass All</button></li>
+        <li><button class="btn btn-danger navbar-btn btn-sm" ng-click="setResultAll('danger')">Fail All</button></li>
+      </ul>
+    </div>
+    <div class="row container">
       <div class="col-md-12">
         <h2>Test Plan</h2>
         <div ng-repeat="section in testPlan">
           <table class="table table-hover">
             <tr class="category-label">
               <td colspan="5">
-                {{ categoryIdx = $index }}
-                {{ section.name }} <span class="pull-right"><button class="btn btn-xs btn-danger" ng-click="removeCategory(categoryIdx)"><i class="icon-trash"></i></button>
+                <input ng-model="section.name" ng-disabled="mode!='edit'" placeholder="Category Name" value="{{section.name}}" />
+                <span class="pull-right"><button class="btn btn-xs btn-danger" ng-click="removeCategory($parent.$index)"><i class="icon-trash"></i></button></span>
               </td>
             </tr>
             <tr class="column-label">
@@ -33,11 +51,11 @@
               <td>
                 <div>
                   <div ng-show="step.outcome!='' && mode=='run'">
-                    <a ng-click="setResult(categoryIdx, $index, 'success')" ><i class="icon-thumbs-up-alt"></i></a>
-                    <a ng-click="setResult(categoryIdx, $index, 'danger')"><i class="icon-thumbs-down-alt"></i></a>
-                    <a ng-click="setResult(categoryIdx, $index, '')"><i class="icon-undo"></i></a>
+                    <a ng-click="setResult($parent.$index, $index, 'success')" ><i class="icon-thumbs-up-alt"></i></a>
+                    <a ng-click="setResult($parent.$index, $index, 'danger')"><i class="icon-thumbs-down-alt"></i></a>
+                    <a ng-click="setResult($parent.$index, $index, '')"><i class="icon-undo"></i></a>
                   </div>
-                  <a ng-click="removeStep(categoryIdx, $index)"><i class="icon-trash"></i></a>
+                  <a ng-click="removeStep($parent.$index, $index)"><i class="icon-trash"></i></a>
                 </div>
               </td>
             </tr>
@@ -46,49 +64,17 @@
           <br />
           <br />
         </div>
-          
-        <button class="btn btn-default pull-right" ng-click="saveTestPlan()" ng-show="mode=='edit'">Save Test Plan</button>
+        <button class="btn btn-default pull-right" ng-click="saveTestPlan()" ng-show="'a' == 'a'">Save Test Plan</button>
         <button class="btn btn-default pull-right" ng-click="addCategory()">Add Category</button>
-        <button class="btn btn-default pull-right" ng-show="mode=='run'">Save Test Results</button>
       </div>
     </div>
-    
-    <div class="row">
-      <div class="col-md-4">
-        <h2>Settings</h2>
-          
-          
-          
-        <h3>Mode</h3>
-        <button class="btn btn-default" ng-click="setMode('edit')">Edit</button>
-        <button class="btn btn-default" ng-click="setMode('run')">Run</button>
-          
-        <div ng-show="mode=='run'">
-          <hr />
-          <button class="btn btn-default" ng-click="setResultAll('')">Reset All</button>
-          <button class="btn btn-success" ng-click="setResultAll('success')">Pass All</button>
-          <button class="btn btn-danger" ng-click="setResultAll('danger')">Fail All</button>
-        </div>
-          
-      </div>
-        
-      <div class="col-md-4">
-      </div>
-        
-      <div class="col-md-8">
-        <h2>Results</h2>
-        <h3>Format</h3>
-        <select ng-model="testCaseFormat" class="form-control">
-          <option>Wiki</option>
-          <option>JIRA</option>
-          <option>YAML</option>
-        </select>
-        <hr />
-        <textarea class="form-control" ng-model="results" placeholder="Test Plan Formatted"></textarea>
-      </div>
-        
-    </div>      
       
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Results</h2>
+        <textarea class="form-control" ng-model="results" placeholder="Test Plan Formatted" rows="10"></textarea>
+      </div>
+    </div>      
     <!-- Scripts and includes -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>

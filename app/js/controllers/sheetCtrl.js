@@ -8,29 +8,8 @@ tcm.controller('testPlanCtrl', function($scope) {
 			action: "1. Close the problem report\n2. Update some junk",
 			outcome: "test",
 			result: ''
-		},
-		{
-			setup: "test2",
-			action: "test2",
-			outcome: "test2",
-			result: ''
-		},
-		{
-			setup: "test3",
-			action: "test3",
-			outcome: "test3",
-			result: ''
 		}
-	];
-	
-	var steps2 = [
-		{
-			setup: "Junk",
-			action: "1. Close the problem report\n2. Update some junk",
-			outcome: "test",
-			result: ''
-		}
-	];
+  ];
 	
   $scope.mode = 'edit';
   $scope.format = '';
@@ -40,10 +19,12 @@ tcm.controller('testPlanCtrl', function($scope) {
   $scope.testPlan.category = [];
 	
 	$scope.testPlan.push({name: "Category 1", testSteps: steps});
-	$scope.testPlan.push({name: "Category 2", testSteps: steps2});
 	
   $scope.setMode = function(mode) {
     $scope.mode = mode;
+    if(mode === 'edit') {
+      $scope.setResultAll('');
+    };
   };
   
   $scope.setResult = function(category, step, result) {
@@ -55,7 +36,7 @@ tcm.controller('testPlanCtrl', function($scope) {
   };
 	
 	$scope.addCategory = function() {
-		$scope.testPlan.push({name: "Test", testSteps: []});
+		$scope.testPlan.push({name: '', testSteps: [{setup: '', action: '', outcome: ''}]});
 	};
   
   $scope.removeStep = function(category, step) {
@@ -68,7 +49,9 @@ tcm.controller('testPlanCtrl', function($scope) {
   
   $scope.setResultAll = function(result) {
     for(i=0; i<$scope.testPlan.length; i++) {
-      $scope.testPlan.testSteps[i].result = result;
+      for(j=0; j<$scope.testPlan[i].testSteps.length; j++) {
+        $scope.testPlan[i].testSteps[j].result = result;
+      }
     };
   };
   
