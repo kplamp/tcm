@@ -1,3 +1,7 @@
+body {
+    padding-top: 50px;
+}
+
 td > textarea {
     border: none;
 }
@@ -32,4 +36,10 @@ textarea {
 
 .menu-group {
     padding-left: 20px;
+}
+
+.category-label input {
+    border: none;
+    background-color: #333;
+    color: white;
 }
