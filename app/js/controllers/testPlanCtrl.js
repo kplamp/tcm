@@ -5,12 +5,11 @@ tcm.controller('testPlanCtrl', function($scope) {
   $scope.mode = 'edit';
   $scope.format = '';
   $scope.results = '';
-  $scope.cols = ['Setup','Action','Expected Outcome','Result'];
   $scope.testPlan = {};
   $scope.testPlan.extrnId = "";
   $scope.testPlan.softwareChange = "";
   $scope.testPlan.testStrategy = "";
-  $scope.testPlan.category = [];
+  $scope.testPlan.category = [{name:'', testSteps: [{setup: '',action:'',outcome:'',result:''}]}];
 	
   $scope.setMode = function(mode) {
     $scope.mode = mode;

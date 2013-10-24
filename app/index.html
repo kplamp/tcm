@@ -14,14 +14,17 @@
       <div class="navbar-header">
         <a class="navbar-brand">PRSR</a>
       </div>
-      <ul class="nav navbar-nav menu-group">
-        <li><button class="btn btn-default pull-right navbar-btn btn-sm" ng-click="addCategory()">Add Category</button></li>
-        <li></li>
-      </ul>
+      
       <ul class="nav navbar-nav menu-group">
         <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setMode('edit')">Edit</button></li>
         <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setMode('run')">Run</button></li>
       </ul>
+      
+      <ul class="nav navbar-nav menu-group">
+        <li><button class="btn btn-default pull-right navbar-btn btn-sm" ng-click="addCategory()" ng-show="mode == 'edit'">Add Category</button></li>
+        <li></li>
+      </ul>
+      
       <ul class="nav navbar-nav menu-group" ng-show="mode=='run'">
         <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setResultAll('')">Reset All</button></li>
         <li><button class="btn btn-success navbar-btn btn-sm" ng-click="setResultAll('success')">Pass All</button></li>
@@ -36,23 +39,19 @@
             <textarea ng-model="testPlan.testStrategy" class="form-control" placeholder="Describe the general test strategy, including any notes for testing."></textarea>
         </div>
         <div ng-repeat="section in testPlan.category">
-          <table class="table table-hover">
+          <table class="table">
             <tr class="category-label">
               <td colspan="5">
-                <input ng-model="section.name" ng-disabled="mode!='edit'" placeholder="Category Name" value="{{section.name}}" />
+                <input class="category" ng-model="section.name" ng-disabled="mode!='edit'" placeholder="Enter Category Name" value="{{section.name}}" />
                 <span class="pull-right"><button class="btn btn-xs btn-danger" ng-click="removeCategory($parent.$index)"><i class="icon-trash"></i></button></span>
               </td>
             </tr>
-            <tr class="column-label">
-              <td></td>
-              <td ng-repeat="col in cols">{{col}}</td>
-            </tr>
             <tr ng-repeat="step in section.testSteps" class="{{step.result}}">
-              <td> {{ $index + 1 }} </td>
-              <td> <textarea ng-model="step.setup" ng-disabled="mode!='edit'" placeholder="Setup Information">{{step.setup}}</textarea> </td>
-              <td> <textarea ng-model="step.action" ng-disabled="mode!='edit'" placeholder="Actions Taken">{{step.action}}</textarea> </td>
-              <td> <textarea ng-model="step.outcome" ng-disabled="mode!='edit'" placeholder="Expected Results">{{step.outcome}}</textarea> </td>
-              <td>
+              <td class="testCaseCell"> {{ $index + 1 }} </td>
+              <td class="testCaseCell"> <textarea ng-model="step.setup" ng-disabled="mode!='edit'" placeholder="Setup Information">{{step.setup}}</textarea> </td>
+              <td class="testCaseCell"> <textarea ng-model="step.action" ng-disabled="mode!='edit'" placeholder="Actions Taken">{{step.action}}</textarea> </td>
+              <td class="testCaseCell"> <textarea ng-model="step.outcome" ng-disabled="mode!='edit'" placeholder="Expected Results">{{step.outcome}}</textarea> </td>
+              <td class="testCaseCell">
                 <div>
                   <div ng-show="step.outcome!='' && mode=='run'">
                     <a ng-click="setResult($parent.$index, $index, 'success')" ><i class="icon-thumbs-up-alt"></i></a>
@@ -64,20 +63,18 @@
               </td>
             </tr>
           </table>
-          <button class="btn btn-default pull-right" ng-click="addStep($index)">Add Test Step</button>
-          <br />
+          <button class="btn btn-default pull-right" ng-click="addStep($index)" ng-show="mode == 'edit'">Add Test Step</button>
           <br />
         </div>
-        <button class="btn btn-default pull-right" ng-click="saveTestPlan()" ng-show="'a' == 'a'">Save Test Plan</button>
+        <button class="btn btn-default" ng-click="saveTestPlan()" ng-show="'a' == 'a'">Save Test Plan</button>
       </div>
-      
-      
     </div>
+    
     <div class="row container">
       <div class="col-md-12">
         <textarea class="form-control" ng-model="results" placeholder="Test Plan Formatted" rows="10"></textarea>
       </div>
-      </div>
+    </div>
       
           
     <!-- Scripts and includes -->
