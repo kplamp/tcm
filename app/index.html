@@ -11,9 +11,7 @@
   </head>
   <body class="container" ng-controller="testPlanCtrl">
     <div class="navbar navbar-default navbar-fixed-top">
-      <div class="navbar-header">
-        <a class="navbar-brand">PRSR</a>
-      </div>
+      <a class="navbar-brand">PRSR</a>
       
       <ul class="nav navbar-nav menu-group">
         <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setMode('edit')">Edit</button></li>
@@ -30,8 +28,12 @@
         <li><button class="btn btn-success navbar-btn btn-sm" ng-click="setResultAll('success')">Pass All</button></li>
         <li><button class="btn btn-danger navbar-btn btn-sm" ng-click="setResultAll('danger')">Fail All</button></li>
       </ul>
+      
+      <ul class="nav navbar-nav pull-right">
+        <li><a href="#">Stephen Schroeder</a></li>
+      </ul>
     </div>
-    <div class="row container">
+    <div class="row container" id="wrap">
       <div class="col-md-12">
         <div class="test">
             <input ng-model="testPlan.extrnId" class="form-control" placeholder="External System ID" />
@@ -46,6 +48,7 @@
                 <span class="pull-right">
                   <button class="btn btn-xs btn-default" ng-click="setResultCategory($index, 'danger')" ng-show="mode == 'run'"><i class="icon-thumbs-down-alt"></i></button>
                   <button class="btn btn-xs btn-default" ng-click="setResultCategory($index, 'success')" ng-show="mode == 'run'"><i class="icon-thumbs-up-alt"></i></button>
+                  <button class="btn btn-xs btn-default" ng-click="setResultCategory($index, '')" ng-show="mode == 'run'"><i class="icon-undo"></i></button>
                   <button class="btn btn-xs btn-danger" ng-click="removeCategory($index)"><i class="icon-trash"></i></button>
                 </span>
               </td>
@@ -66,9 +69,9 @@
                 </div>
               </td>
             </tr>
+            <td colspan="5"><button class="btn btn-xs btn-default pull-right" ng-click="addStep($index)" ng-show="mode == 'edit'">Add Test Step <i class="icon-plus-sign-alt"></i></button></td>
           </table>
-          <button class="btn btn-xs btn-default pull-right" ng-click="addStep($index)" ng-show="mode == 'edit'">Add Test Step <i class="icon-plus-sign-alt"></i></button>
-          <br />
+          
         </div>
         <button class="btn btn-default" ng-click="saveTestPlan()" ng-show="'a' == 'a'">Save Test Plan</button>
       </div>
@@ -79,7 +82,6 @@
         <textarea class="form-control" ng-model="results" placeholder="Test Plan Formatted" rows="10"></textarea>
       </div>
     </div>
-      
           
     <!-- Scripts and includes -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>

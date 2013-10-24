@@ -1,22 +1,16 @@
+html,body { height: 100%; }
+
 body {
     padding-top: 60px;
-    /*background-image: url('http://subtlepatterns.com/patterns/strange_bullseyes.png');*/
-    background-image: url('http://subtlepatterns.com/patterns/hexellence.png');
-    /*background-image: url('http://subtlepatterns.com/patterns/irongrip.png');*/
+    background-image: url('../img/hexellence.png');
 }
 
 td > textarea {
     border: none;
+    width: 315px;
 }
 
-td, tr {
-    height: 30px;
-    border: 1px solid #333;
-}
-
-td {
-    padding: 4px;
-}
+td:last-child { border: none; }
 
 .column-label {
     background-color: #333;
@@ -24,23 +18,12 @@ td {
     color: white;
 }
 
+.category { width: 500px; }
+
 .category-label {
     background-color: #333;
     color: white;
     padding-left: 5px;
-}
-
-textarea {
-    width: 315px;
-    font-size: 11px;
-}
-
-.result {
-    text-align: center;
-}
-
-.menu-group {
-    padding-left: 20px;
 }
 
 .category-label input {
@@ -50,9 +33,7 @@ textarea {
     font-weight: bold;
 }
 
-.category {
-    width: 500px;
-}
+.menu-group { padding-left: 20px; }
 
 .testCaseCell {
     background: white;
