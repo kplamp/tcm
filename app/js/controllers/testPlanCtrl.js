@@ -56,4 +56,8 @@ tcm.controller('testPlanCtrl', function($scope) {
   $scope.saveTestPlan = function() {
     $scope.results = angular.toJson($scope.testPlan, true);
   };
+  
+  $scope.loadJson = function() {
+    $scope.testPlan = JSON.parse($scope.results);
+  }
 });

@@ -73,12 +73,17 @@
           </table>
           
         </div>
-        <button class="btn btn-default" ng-click="saveTestPlan()" ng-show="'a' == 'a'">Save Test Plan</button>
+        
       </div>
     </div>
     
     <div class="row container">
+      
       <div class="col-md-12">
+        <div class="pull-right">
+          <button class="btn btn-default btn-xs" ng-click="saveTestPlan()">Save to JSON</button>
+          <button class="btn btn-default btn-xs" ng-click="loadJson()">Load from JSON</button>
+        </div>
         <textarea class="form-control" ng-model="results" placeholder="Test Plan Formatted" rows="10"></textarea>
       </div>
     </div>
