@@ -1,5 +1,5 @@
 body {
-    padding-top: 50px;
+    padding-top: 60px;
 }
 
 td > textarea {
@@ -21,8 +21,9 @@ td {
 }
 
 .category-label {
-		background-color: #333;
-		color: white;
+    background-color: #333;
+    color: white;
+    padding-left: 5px;
 }
 
 textarea {
