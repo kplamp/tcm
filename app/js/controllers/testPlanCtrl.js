@@ -22,6 +22,12 @@ tcm.controller('testPlanCtrl', function($scope) {
 		$scope.testPlan.category[category].testSteps[step].result = result;
   };
   
+  $scope.setResultCategory = function(category, result) {
+    for(i=0; i<$scope.testPlan.category[category].testSteps.length; i++) {
+      $scope.testPlan.category[category].testSteps[i].result = result;
+    };
+  };
+  
   $scope.setResultAll = function(result) {
     for(i=0; i<$scope.testPlan.category.length; i++) {
       for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {

@@ -43,7 +43,11 @@
             <tr class="category-label">
               <td colspan="5">
                 <input class="category" ng-model="section.name" ng-disabled="mode!='edit'" placeholder="Enter Category Name" value="{{section.name}}" />
-                <span class="pull-right"><button class="btn btn-xs btn-danger" ng-click="removeCategory($parent.$index)"><i class="icon-trash"></i></button></span>
+                <span class="pull-right">
+                  <button class="btn btn-xs btn-default" ng-click="setResultCategory($index, 'danger')" ng-show="mode == 'run'"><i class="icon-thumbs-down-alt"></i></button>
+                  <button class="btn btn-xs btn-default" ng-click="setResultCategory($index, 'success')" ng-show="mode == 'run'"><i class="icon-thumbs-up-alt"></i></button>
+                  <button class="btn btn-xs btn-danger" ng-click="removeCategory($index)"><i class="icon-trash"></i></button>
+                </span>
               </td>
             </tr>
             <tr ng-repeat="step in section.testSteps" class="{{step.result}}">
@@ -53,17 +57,17 @@
               <td class="testCaseCell"> <textarea ng-model="step.outcome" ng-disabled="mode!='edit'" placeholder="Expected Results">{{step.outcome}}</textarea> </td>
               <td class="testCaseCell">
                 <div>
-                  <div ng-show="step.outcome!='' && mode=='run'">
+                  <span ng-show="step.outcome!='' && mode=='run'">
                     <a ng-click="setResult($parent.$index, $index, 'success')" ><i class="icon-thumbs-up-alt"></i></a>
                     <a ng-click="setResult($parent.$index, $index, 'danger')"><i class="icon-thumbs-down-alt"></i></a>
                     <a ng-click="setResult($parent.$index, $index, '')"><i class="icon-undo"></i></a>
-                  </div>
+                  </span>
                   <a ng-click="removeStep($parent.$index, $index)"><i class="icon-trash"></i></a>
                 </div>
               </td>
             </tr>
           </table>
-          <button class="btn btn-default pull-right" ng-click="addStep($index)" ng-show="mode == 'edit'">Add Test Step</button>
+          <button class="btn btn-xs btn-default pull-right" ng-click="addStep($index)" ng-show="mode == 'edit'">Add Test Step <i class="icon-plus-sign-alt"></i></button>
           <br />
         </div>
         <button class="btn btn-default" ng-click="saveTestPlan()" ng-show="'a' == 'a'">Save Test Plan</button>
