@@ -58,6 +58,8 @@ tcm.controller('testPlanCtrl', function($scope) {
   };
   
   $scope.loadJson = function() {
-    $scope.testPlan = JSON.parse($scope.results);
-  }
+    if($scope.results) {
+      $scope.testPlan = JSON.parse($scope.results);
+    };
+  };
 });
