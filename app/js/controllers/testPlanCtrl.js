@@ -49,9 +49,9 @@ tcm.controller('testPlanCtrl', function($scope) {
 		$scope.testPlan.category.push({name: '', testSteps: [{setup: '', action: '', outcome: ''}]});
 	};
   
-	$scope.removeCategory = function(category) {
-		$scope.testPlan.category.splice(category, 1);
-	}
+	$scope.removeCategory = function(index) {
+		$scope.testPlan.category.splice(index, 1);
+	};
   
   $scope.saveTestPlan = function() {
     $scope.results = angular.toJson($scope.testPlan, true);
