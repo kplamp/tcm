@@ -10,6 +10,9 @@ tcm.config(['$routeProvider',
       .when('/about', {
         templateUrl: 'views/about.html'
       })
+      .when('/reports', {
+        templateUrl: 'views/reports.html'
+      })
       .otherwise({
         redirectTo: '/'
       });
