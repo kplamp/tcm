@@ -1,6 +1,6 @@
 var tcm = angular.module('tcm');
 
-tcm.controller('testPlanCtrl', function($scope) {
+tcm.controller('TestPlanCtrl', function($scope) {
   
   $scope.mode = 'edit';
   $scope.format = '';

@@ -9,83 +9,16 @@
     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" href="css/tcm.css">
   </head>
-  <body class="container" ng-controller="testPlanCtrl">
-    <div class="navbar navbar-default navbar-fixed-top">
-      <a class="navbar-brand">PRSR</a>
-      
-      <ul class="nav navbar-nav menu-group">
-        <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setMode('edit')">Edit</button></li>
-        <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setMode('run')">Run</button></li>
-      </ul>
-      
-      <ul class="nav navbar-nav menu-group">
-        <li><button class="btn btn-default pull-right navbar-btn btn-sm" ng-click="addCategory()" ng-show="mode == 'edit'">Add Category</button></li>
-      </ul>
-      
-      <ul class="nav navbar-nav menu-group" ng-show="mode=='run'">
-        <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setResultAll('')">Reset All</button></li>
-        <li><button class="btn btn-success navbar-btn btn-sm" ng-click="setResultAll('success')">Pass All</button></li>
-        <li><button class="btn btn-danger navbar-btn btn-sm" ng-click="setResultAll('danger')">Fail All</button></li>
-      </ul>
-      
-      <ul class="nav navbar-nav pull-right">
-        <li><a href="#">Stephen Schroeder</a></li>
-      </ul>
-    </div>
+  <body class="container" ng-controller="TestPlanCtrl">
+    <div ng-include src="'./views/navigation.html'"></div>
+
     <div class="row container" id="wrap">
-      <div class="col-md-12">
-        <div class="test">
-            <input ng-model="testPlan.extrnId" class="form-control" placeholder="External System ID" />
-            <textarea ng-model="testPlan.softwareChange" class="form-control" placeholder="Describe the software change being made"></textarea>
-            <textarea ng-model="testPlan.testStrategy" class="form-control" placeholder="Describe the general test strategy, including any notes for testing."></textarea>
-        </div>
-        <div ng-repeat="section in testPlan.category">
-          <table class="table">
-            <tr class="category-label">
-              <td colspan="5">
-                <input class="category" ng-model="section.name" ng-disabled="mode!='edit'" placeholder="Enter Category Name" value="{{section.name}}" />
-                <span class="pull-right">
-                  <button class="btn btn-xs btn-default" ng-click="setResultCategory($index, 'danger')" ng-show="mode == 'run'"><i class="icon-thumbs-down-alt"></i></button>
-                  <button class="btn btn-xs btn-default" ng-click="setResultCategory($index, 'success')" ng-show="mode == 'run'"><i class="icon-thumbs-up-alt"></i></button>
-                  <button class="btn btn-xs btn-default" ng-click="setResultCategory($index, '')" ng-show="mode == 'run'"><i class="icon-undo"></i></button>
-                  <button class="btn btn-xs btn-danger" ng-click="removeCategory($index)"><i class="icon-trash"></i></button>
-                </span>
-              </td>
-            </tr>
-            <tr ng-repeat="step in section.testSteps" class="{{step.result}}">
-              <td class="testCaseCell"> {{ $index + 1 }} </td>
-              <td class="testCaseCell"> <textarea ng-model="step.setup" ng-disabled="mode!='edit'" placeholder="Setup Information">{{step.setup}}</textarea> </td>
-              <td class="testCaseCell"> <textarea ng-model="step.action" ng-disabled="mode!='edit'" placeholder="Actions Taken">{{step.action}}</textarea> </td>
-              <td class="testCaseCell"> <textarea ng-model="step.outcome" ng-disabled="mode!='edit'" placeholder="Expected Results">{{step.outcome}}</textarea> </td>
-              <td class="testCaseCell">
-                <div>
-                  <span ng-show="step.outcome!='' && mode=='run'">
-                    <a ng-click="setResult($parent.$index, $index, 'success')" ><i class="icon-thumbs-up-alt"></i></a>
-                    <a ng-click="setResult($parent.$index, $index, 'danger')"><i class="icon-thumbs-down-alt"></i></a>
-                    <a ng-click="setResult($parent.$index, $index, '')"><i class="icon-undo"></i></a>
-                  </span>
-                  <a ng-click="removeStep($parent.$index, $index)"><i class="icon-trash"></i></a>
-                </div>
-              </td>
-            </tr>
-            <td colspan="5"><button class="btn btn-xs btn-default pull-right" ng-click="addStep($index)" ng-show="mode == 'edit'">Add Test Step <i class="icon-plus-sign-alt"></i></button></td>
-          </table>
-          
-        </div>
-        
-      </div>
+      
+      <ng-view></ng-view>
+      
     </div>
     
-    <div class="row container">
-      
-      <div class="col-md-12">
-        <div class="pull-right">
-          <button class="btn btn-default btn-xs" ng-click="saveTestPlan()">Save to JSON</button>
-          <button class="btn btn-default btn-xs" ng-click="loadJson()">Load from JSON</button>
-        </div>
-        <textarea class="form-control" ng-model="results" placeholder="Test Plan Formatted" rows="10"></textarea>
-      </div>
-    </div>
+    
           
     <!-- Scripts and includes -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -93,5 +26,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/controllers/testPlanCtrl.js"></script>
+    <script src="js/controllers/headerCtrl.js"></script>
+    <script src="js/routers/router.js"></script>
   </body>
 </html>
