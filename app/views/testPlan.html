@@ -13,13 +13,17 @@
     <li><button class="btn btn-success navbar-btn btn-sm" ng-click="setResultAll('success')">Pass All</button></li>
     <li><button class="btn btn-danger navbar-btn btn-sm" ng-click="setResultAll('danger')">Fail All</button></li>
   </ul>
+  
+  <ul class="nav navbar-nav menu-group" ng-show="mode=='run'">
+    <li></li>
+  </ul>
 </div>
       
 <div class="col-md-12 testPlan">
   <div class="test">
-    <input ng-model="testPlan.extrnId" class="form-control" placeholder="External System ID" />
-    <textarea ng-model="testPlan.softwareChange" class="form-control" placeholder="Describe the software change being made"></textarea>
-    <textarea ng-model="testPlan.testStrategy" class="form-control" placeholder="Describe the general test strategy, including any notes for testing."></textarea>
+    <input ng-model="testPlan.extrnId" class="form-control" ng-disabled="mode!='edit'" placeholder="External System ID" />
+    <textarea ng-model="testPlan.softwareChange" class="form-control" ng-disabled="mode!='edit'" placeholder="Describe the software change being made"></textarea>
+    <textarea ng-model="testPlan.testStrategy" class="form-control" ng-disabled="mode!='edit'" placeholder="Describe the general test strategy, including any notes for testing."></textarea>
   </div>
   <div ng-repeat="section in testPlan.category">
     <table class="table">

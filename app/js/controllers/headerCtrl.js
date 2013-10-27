@@ -7,6 +7,10 @@ tcm.controller('HeaderController', function($scope) {
       link: ""
     },
     {
+      title: "Reports",
+      link: "reports"
+    },
+    {
       title: "About",
       link: "about"
     }
