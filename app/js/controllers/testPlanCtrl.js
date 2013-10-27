@@ -62,4 +62,26 @@ tcm.controller('TestPlanCtrl', function($scope) {
       $scope.testPlan = JSON.parse($scope.results);
     };
   };
+  
+  $scope.getTotalTestCases = function() {
+    count = 0;
+    for(i=0; i<$scope.testPlan.category.length; i++) {
+      for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
+        count ++;
+      }
+    }
+    return count;
+  };
+  
+  $scope.getPassedTestCases = function() {
+    count = 0;
+    for(i=0; i<$scope.testPlan.category.length; i++) {
+      for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
+        if($scope.testPlan.category[i].testSteps[j].result == 'success') {
+          count ++;
+        }
+      }
+    }
+    return count;
+  };
 });
