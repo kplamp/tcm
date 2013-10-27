@@ -16,13 +16,6 @@ td > textarea {
 }
 
 td:last-child { border: none; }
-
-.column-label {
-    background-color: #333;
-    font-weight: bold;
-    color: white;
-}
-
 .category { width: 500px; }
 
 .category-label {
@@ -35,7 +28,6 @@ td:last-child { border: none; }
     border: none;
     background-color: #333;
     color: white;
-    font-weight: bold;
 }
 
 .menu-group { padding-left: 20px; }
