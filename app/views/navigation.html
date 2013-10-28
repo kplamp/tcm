@@ -11,7 +11,7 @@
   
   <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav">
-      <li data-ng-repeat="item in menu" ui-route="/{{item.link}}" ng-class="(item.link == location.path() && 'active')">
+      <li data-ng-repeat="item in menu" ui-route="/{{item.link}}"">
         <a href="#/{{item.link}}">{{item.title}}</a>
       </li>
     </ul>

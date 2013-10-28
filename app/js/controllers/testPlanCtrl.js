@@ -73,15 +73,16 @@ tcm.controller('TestPlanCtrl', function($scope) {
     return count;
   };
   
-  $scope.getPassedTestCases = function() {
+  $scope.getCountByStatus = function(status) {
     count = 0;
     for(i=0; i<$scope.testPlan.category.length; i++) {
       for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
-        if($scope.testPlan.category[i].testSteps[j].result == 'success') {
+        if($scope.testPlan.category[i].testSteps[j].result == status) {
           count ++;
         }
       }
     }
     return count;
-  };
+  }
+  
 });

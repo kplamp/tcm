@@ -19,14 +19,14 @@ td:last-child { border: none; }
 .category { width: 500px; }
 
 .category-label {
-    background-color: #333;
+    background-color: #0B2161;
     color: white;
     padding-left: 5px;
 }
 
 .category-label input {
     border: none;
-    background-color: #333;
+    background-color: #0B2161;
     color: white;
 }
 
@@ -54,4 +54,9 @@ td:last-child { border: none; }
 
 h1, h2, h3, h4, h5, h6 {
     color: #555;
+}
+
+.progress {
+    margin-top: 10px;
+    width: 500px;
 }
