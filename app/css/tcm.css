@@ -19,14 +19,13 @@ td:last-child { border: none; }
 .category { width: 500px; }
 
 .category-label {
-    background-color: #0B2161;
-    color: white;
+    background-color: #555;
     padding-left: 5px;
 }
 
 .category-label input {
     border: none;
-    background-color: #0B2161;
+    background-color: #555;
     color: white;
 }
 
@@ -48,7 +47,7 @@ td:last-child { border: none; }
     border-width: 0 0 1px;
     border: #333;
     z-index: 1020;
-    top: 55px;
+    top: 53px;
     background-color: #ddd;
 }
 
