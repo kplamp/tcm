@@ -2,6 +2,7 @@ var tcm = angular.module('tcm');
 
 tcm.controller('TestPlanCtrl', function($scope) {
   $scope.mode = 'edit';
+  $scope.formats = ['YAML', 'JSON'];
   $scope.format = '';
   $scope.results = '';
   $scope.testPlan = {};
@@ -52,24 +53,34 @@ tcm.controller('TestPlanCtrl', function($scope) {
 		$scope.testPlan.category.splice(index, 1);
 	};
   
-  $scope.saveToJson = function() {
-    $scope.results = angular.toJson($scope.testPlan, true);
-  };
-  
-  $scope.saveToYaml = function() {
-    var cleanedJson = JSON.stringify($scope.testPlan, removeHashKey);
-    cleanedJson = JSON.parse(cleanedJson);
-    $scope.results = YAML.stringify(cleanedJson, 10);
-  };
-  
-  $scope.loadJson = function() {
-    if($scope.results) {
-      $scope.testPlan = JSON.parse($scope.results);
+  $scope.saveCopy = function(format) {
+    if(format == 'yaml') {
+      var cleanedJson = JSON.stringify($scope.testPlan, _removeHashKey);
+      cleanedJson = JSON.parse(cleanedJson);
+      $scope.results = YAML.stringify(cleanedJson, 10);
+    }
+    else if (format == 'json') {
+      $scope.results = angular.toJson($scope.testPlan, true);
+    }
+    else {
+      // Add error handling
     };
   };
   
-  $scope.loadYaml = function() {
-     $scope.testPlan = YAML.parse($scope.results);
+  $scope.loadCopy = function(format) {
+    if(format == 'yaml') {
+      if($scope.results) {
+        $scope.testPlan = YAML.parse($scope.results);
+      }
+    }
+    else if(format == 'json') {
+      if($scope.results) {
+        $scope.testPlan = JSON.parse($scope.results);
+      };
+    }
+    else {
+      // Add error handling
+    }
   };
   
   $scope.getTotalTestCases = function() {
@@ -94,7 +105,7 @@ tcm.controller('TestPlanCtrl', function($scope) {
     return count;
   };
   
-  function removeHashKey(key, value) {
+  function _removeHashKey(key, value) {
     if(key == "$$hashKey") {
       return undefined;
     }

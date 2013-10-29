@@ -20,8 +20,12 @@
     </div>
   </div>
 </div>
-  
+
 <div class="col-md-12 testPlan">  
+
+  <div ng-show="errors" class="alert alert-danger">
+    {{errors}}
+  </div>
   <div class="test">
     <input ng-model="testPlan.extrnId" class="form-control" ng-disabled="mode=='run'" placeholder="External System ID" />
     <textarea ng-model="testPlan.softwareChange" class="form-control" ng-disabled="mode=='run'" placeholder="Describe the software change being made"></textarea>
@@ -64,10 +68,13 @@
     
     <div class="col-md-12">
       <div class="pull-right">
-        <button class="btn btn-default btn-xs" ng-click="saveToJson()">Save to JSON</button>
-        <button class="btn btn-default btn-xs" ng-click="loadJson()">Load from JSON</button>
-        <button class="btn btn-default btn-xs" ng-click="saveToYaml()">Save to YAML</button>
-        <button class="btn btn-default btn-xs" ng-click="loadYaml()">Load from YAML</button>
+        <label>Format:</label>
+        <select ng-model="format">
+          <option value="yaml">YAML</option>
+          <option value="json">JSON</option>
+        </select>
+        <button class="btn btn-default btn-xs" ng-click="saveCopy(format)">Save</button>
+        <button class="btn btn-default btn-xs" ng-click="loadCopy(format)">Load</button>
       </div>
       <textarea class="form-control" ng-model="results" placeholder="Test Plan Formatted" rows="10"></textarea>
     </div>
