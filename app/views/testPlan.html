@@ -64,8 +64,10 @@
     
     <div class="col-md-12">
       <div class="pull-right">
-        <button class="btn btn-default btn-xs" ng-click="saveTestPlan()">Save to JSON</button>
+        <button class="btn btn-default btn-xs" ng-click="saveToJson()">Save to JSON</button>
         <button class="btn btn-default btn-xs" ng-click="loadJson()">Load from JSON</button>
+        <button class="btn btn-default btn-xs" ng-click="saveToYaml()">Save to YAML</button>
+        <button class="btn btn-default btn-xs" ng-click="loadYaml()">Load from YAML</button>
       </div>
       <textarea class="form-control" ng-model="results" placeholder="Test Plan Formatted" rows="10"></textarea>
     </div>

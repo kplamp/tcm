@@ -1,7 +1,6 @@
 var tcm = angular.module('tcm');
 
 tcm.controller('TestPlanCtrl', function($scope) {
-  
   $scope.mode = 'edit';
   $scope.format = '';
   $scope.results = '';
@@ -53,14 +52,24 @@ tcm.controller('TestPlanCtrl', function($scope) {
 		$scope.testPlan.category.splice(index, 1);
 	};
   
-  $scope.saveTestPlan = function() {
+  $scope.saveToJson = function() {
     $scope.results = angular.toJson($scope.testPlan, true);
+  };
+  
+  $scope.saveToYaml = function() {
+    var cleanedJson = JSON.stringify($scope.testPlan, removeHashKey);
+    cleanedJson = JSON.parse(cleanedJson);
+    $scope.results = YAML.stringify(cleanedJson, 10);
   };
   
   $scope.loadJson = function() {
     if($scope.results) {
       $scope.testPlan = JSON.parse($scope.results);
     };
+  };
+  
+  $scope.loadYaml = function() {
+     $scope.testPlan = YAML.parse($scope.results);
   };
   
   $scope.getTotalTestCases = function() {
@@ -83,6 +92,12 @@ tcm.controller('TestPlanCtrl', function($scope) {
       }
     }
     return count;
-  }
+  };
   
+  function removeHashKey(key, value) {
+    if(key == "$$hashKey") {
+      return undefined;
+    }
+    else return value;
+  }
 });
