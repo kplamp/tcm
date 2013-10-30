@@ -6,6 +6,10 @@ With TCM, users can create test plans, export them in (eventually) a variety of 
 
 Users can (eventually) also re-load the exported test plan and execute the test plan, keeping track of the number of executions as well as pass/fail ratio.
 
+## Dependencies
+- Angular JS
+- yaml.js (https://github.com/jeremyfa/yaml.js)
+
 ## Created By
 
 Stephen Schroeder (steve@sjschroeder.com)

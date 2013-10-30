@@ -62,6 +62,58 @@ tcm.controller('TestPlanCtrl', function($scope) {
     else if (format == 'json') {
       $scope.results = angular.toJson($scope.testPlan, true);
     }
+    else if (format == 'wiki') {
+      var wikiPlan = '';
+      wikiPlan += '^' + $scope.testPlan.extrnId;
+      wikiPlan += '\n//' + $scope.testPlan.softwareChange;
+      wikiPlan += '\n//' + $scope.testPlan.testStrategy;
+      for(i=0; i<$scope.testPlan.category.length; i++) {
+          wikiPlan += '\n//';
+          wikiPlan += $scope.testPlan.category[i].name;
+          for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
+            wikiPlan += '\n';
+            wikiPlan += '*Setup:* ' + $scope.testPlan.category[i].testSteps[j].setup;
+            wikiPlan += ' \\\\ *Action:* ' + $scope.testPlan.category[i].testSteps[j].action;
+            wikiPlan += ' \\\\ *Outcome:* ' + $scope.testPlan.category[i].testSteps[j].outcome;
+          };
+      };
+      
+      $scope.results = wikiPlan;
+    }
+    else if (format == 'jira') {
+      var jiraPlan = '';      
+      
+      jiraPlan += '||' + $scope.testPlan.extrnId + '|| ||';
+      jiraPlan += '\n||' + $scope.testPlan.softwareChange + '|| ||';
+      jiraPlan += '\n||' + $scope.testPlan.testStrategy + '|| ||';
+      for(i=0; i<$scope.testPlan.category.length; i++) {
+          jiraPlan += '\n||';
+          jiraPlan += $scope.testPlan.category[i].name;
+          jiraPlan += '|| ||';
+          for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
+            jiraPlan += '\n|';
+            jiraPlan += '*Setup:* ' + $scope.testPlan.category[i].testSteps[j].setup;
+            jiraPlan += '\\\\  *Action:* ' + $scope.testPlan.category[i].testSteps[j].action;
+            jiraPlan += '\\\\  *Outcome:* ' + $scope.testPlan.category[i].testSteps[j].outcome;
+            if($scope.mode == 'run') {
+              switch($scope.testPlan.category[i].testSteps[j].result) {
+                case 'success':
+                  jiraPlan += '|(/)|';
+                  break;
+                case 'danger':
+                  jiraPlan += '|(x)|';
+                  break;
+                default:
+                  jiraPlan += '|(?)|';
+              }
+            }
+            else {
+              jiraPlan += '|(?)|';
+            }
+          };
+      };
+      $scope.results = jiraPlan;
+    }
     else {
       // Add error handling
     };

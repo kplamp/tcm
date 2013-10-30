@@ -72,9 +72,11 @@
         <select ng-model="format">
           <option value="yaml">YAML</option>
           <option value="json">JSON</option>
+          <option value="wiki">Wiki</option>
+          <option value="jira">Jira</option>
         </select>
         <button class="btn btn-default btn-xs" ng-click="saveCopy(format)">Save</button>
-        <button class="btn btn-default btn-xs" ng-click="loadCopy(format)">Load</button>
+        <button class="btn btn-default btn-xs" ng-click="loadCopy(format)" ng-show="format != 'wiki' && format != 'jira'">Load</button>
       </div>
       <textarea class="form-control" ng-model="results" placeholder="Test Plan Formatted" rows="10"></textarea>
     </div>
