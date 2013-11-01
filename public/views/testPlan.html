@@ -1,0 +1,84 @@
+<div class="navbar navbar-default navbar-fixed-sub">
+  <ul class="nav navbar-nav menu-group">
+    <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setMode('edit')">Edit</button></li>
+    <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setMode('run')">Run</button></li>
+  </ul>
+    
+  <ul class="nav navbar-nav menu-group">
+    <li><button class="btn btn-default pull-right navbar-btn btn-sm" ng-click="addCategory()" ng-show="mode == 'edit'">Add Category</button></li>
+  </ul>
+    
+  <ul class="nav navbar-nav menu-group" ng-show="mode=='run'">
+    <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setResultAll('')">Reset All</button></li>
+    <li><button class="btn btn-success navbar-btn btn-sm" ng-click="setResultAll('success')">Pass All</button></li>
+    <li><button class="btn btn-danger navbar-btn btn-sm" ng-click="setResultAll('danger')">Fail All</button></li>
+  </ul>
+  <div class="nav navbar-nav menu-group" ng-show="mode=='run'">
+    <div class="progress">
+      <div class="progress-bar progress-bar-success" style="width: {{ (getCountByStatus('success') / getTotalTestCases()) * 100}}%">{{getCountByStatus('success')}}</div>
+      <div class="progress-bar progress-bar-danger" style="width: {{ (getCountByStatus('danger') / getTotalTestCases()) * 100}}%">{{getCountByStatus('danger')}}</div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12 testPlan">  
+
+  <div ng-show="errors" class="alert alert-danger">
+    {{errors}}
+  </div>
+  <div class="test">
+    <input ng-model="testPlan.extrnId" class="form-control" ng-disabled="mode=='run'" placeholder="External System ID" />
+    <textarea ng-model="testPlan.softwareChange" class="form-control" ng-disabled="mode=='run'" placeholder="Describe the software change being made"></textarea>
+    <textarea ng-model="testPlan.testStrategy" class="form-control" ng-disabled="mode=='run'" placeholder="Describe the general test strategy, including any notes for testing."></textarea>
+  </div>
+  <div ng-repeat="section in testPlan.category">
+    <table class="table">
+      <tr class="category-label">
+        <td colspan="5">
+          <input class="category" ng-model="section.name" ng-disabled="mode=='run'" placeholder="Enter Category Name" value="{{section.name}}" />
+          <span class="pull-right">
+            <button class="btn btn-xs btn-default" ng-click="setResultCategory($index, 'danger')" ng-show="mode == 'run'"><i class="icon-thumbs-down-alt"></i></button>
+            <button class="btn btn-xs btn-default" ng-click="setResultCategory($index, 'success')" ng-show="mode == 'run'"><i class="icon-thumbs-up-alt"></i></button>
+            <button class="btn btn-xs btn-default" ng-click="setResultCategory($index, '')" ng-show="mode == 'run'"><i class="icon-undo"></i></button>
+            <button class="btn btn-xs btn-danger" ng-click="removeCategory($index)"><i class="icon-trash"></i></button>
+          </span>
+        </td>
+      </tr>
+      <tr ng-repeat="step in section.testSteps" class="{{step.result}}">
+        <td class="testCaseCell"> {{ $index + 1 }} </td>
+        <td class="testCaseCell"> <textarea ng-model="step.setup" ng-disabled="mode=='run'" placeholder="Setup Information">{{step.setup}}</textarea> </td>
+        <td class="testCaseCell"> <textarea ng-model="step.action" ng-disabled="mode=='run'" placeholder="Actions Taken">{{step.action}}</textarea> </td>
+        <td class="testCaseCell"> <textarea ng-model="step.outcome" ng-disabled="mode=='run'" placeholder="Expected Results">{{step.outcome}}</textarea> </td>
+        <td class="testCaseCell">
+          <div>
+            <span ng-show="mode=='run'">
+              <a ng-click="setResult($parent.$index, $index, 'success')" ><i class="icon-thumbs-up-alt"></i></a>
+              <a ng-click="setResult($parent.$index, $index, 'danger')"><i class="icon-thumbs-down-alt"></i></a>
+              <a ng-click="setResult($parent.$index, $index, '')"><i class="icon-undo"></i></a>
+            </span>
+            <a ng-click="removeStep($parent.$index, $index)"><i class="icon-trash"></i></a>
+          </div>
+        </td>
+      </tr>
+      <td colspan="5"><button class="btn btn-xs btn-default pull-right" ng-click="addStep($index)" ng-show="mode == 'edit'">Add Test Step <i class="icon-plus-sign-alt"></i></button></td>
+    </table>
+      
+  </div>
+  <div class="row container">
+    
+    <div class="col-md-12">
+      <div class="pull-right">
+        <label>Format:</label>
+        <select ng-model="format">
+          <option value="yaml">YAML</option>
+          <option value="json">JSON</option>
+          <option value="wiki">Wiki</option>
+          <option value="jira">Jira</option>
+        </select>
+        <button class="btn btn-default btn-xs" ng-click="saveCopy(format)">Save</button>
+        <button class="btn btn-default btn-xs" ng-click="loadCopy(format)" ng-show="format != 'wiki' && format != 'jira'">Load</button>
+      </div>
+      <textarea class="form-control" ng-model="results" placeholder="Test Plan Formatted" rows="10"></textarea>
+    </div>
+  </div>
+</div>
