@@ -1,16 +1,30 @@
 var tcm = angular.module('tcm');
 
-tcm.controller('TestPlanCtrl', function($scope) {
+tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, TestPlanFactory) {
   $scope.mode = 'edit';
-  $scope.formats = ['YAML', 'JSON'];
   $scope.format = '';
   $scope.results = '';
-  $scope.testPlan = {};
-  $scope.testPlan.extrnId = "";
-  $scope.testPlan.softwareChange = "";
-  $scope.testPlan.testStrategy = "";
-  $scope.testPlan.category = [{name:'', testSteps: [{setup: '',action:'',outcome:'',result:''}]}];
-	
+  $scope.info = "";
+  var planId = $routeParams.extrnId;
+  
+  if(planId) {
+    $http({
+      method: 'GET',
+      url: '/testplans/' + planId
+    }).success( function(data, status, headers, config) {
+      $scope.testPlan = data.plan;
+    }).error( function(data, status, headers, config) {
+      $scope.errors = 'Error retrieving plan ' + planId;
+    });
+  }
+  else {
+    $scope.testPlan = {};
+    $scope.testPlan.extrnId = "";
+    $scope.testPlan.softwareChange = "";
+    $scope.testPlan.testStrategy = "";
+    $scope.testPlan.category = [{name:'', testSteps: [{setup: '',action:'',outcome:'',result:''}]}];
+  }
+  
   $scope.setMode = function(mode) {
     $scope.mode = mode;
     if(mode === 'edit') {
@@ -53,7 +67,7 @@ tcm.controller('TestPlanCtrl', function($scope) {
 		$scope.testPlan.category.splice(index, 1);
 	};
   
-  $scope.saveCopy = function(format) {
+  $scope.exportCopy = function(format) {
     if(format == 'yaml') {
       var cleanedJson = JSON.stringify($scope.testPlan, _removeHashKey);
       cleanedJson = JSON.parse(cleanedJson);
@@ -68,14 +82,14 @@ tcm.controller('TestPlanCtrl', function($scope) {
       wikiPlan += '\n//' + $scope.testPlan.softwareChange;
       wikiPlan += '\n//' + $scope.testPlan.testStrategy;
       for(i=0; i<$scope.testPlan.category.length; i++) {
-          wikiPlan += '\n//';
-          wikiPlan += $scope.testPlan.category[i].name;
-          for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
-            wikiPlan += '\n';
-            wikiPlan += '*Setup:* ' + $scope.testPlan.category[i].testSteps[j].setup;
-            wikiPlan += ' \\\\ *Action:* ' + $scope.testPlan.category[i].testSteps[j].action;
-            wikiPlan += ' \\\\ *Outcome:* ' + $scope.testPlan.category[i].testSteps[j].outcome;
-          };
+        wikiPlan += '\n//';
+        wikiPlan += $scope.testPlan.category[i].name;
+        for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
+          wikiPlan += '\n';
+          wikiPlan += '*Setup:* ' + $scope.testPlan.category[i].testSteps[j].setup;
+          wikiPlan += ' \\\\ *Action:* ' + $scope.testPlan.category[i].testSteps[j].action;
+          wikiPlan += ' \\\\ *Outcome:* ' + $scope.testPlan.category[i].testSteps[j].outcome;
+        };
       };
       
       $scope.results = wikiPlan;
@@ -87,35 +101,34 @@ tcm.controller('TestPlanCtrl', function($scope) {
       jiraPlan += '\n||' + $scope.testPlan.softwareChange + '|| ||';
       jiraPlan += '\n||' + $scope.testPlan.testStrategy + '|| ||';
       for(i=0; i<$scope.testPlan.category.length; i++) {
-          jiraPlan += '\n||';
-          jiraPlan += $scope.testPlan.category[i].name;
-          jiraPlan += '|| ||';
-          for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
-            jiraPlan += '\n|';
-            jiraPlan += '*Setup:* ' + $scope.testPlan.category[i].testSteps[j].setup;
-            jiraPlan += '\\\\  *Action:* ' + $scope.testPlan.category[i].testSteps[j].action;
-            jiraPlan += '\\\\  *Outcome:* ' + $scope.testPlan.category[i].testSteps[j].outcome;
-            if($scope.mode == 'run') {
-              switch($scope.testPlan.category[i].testSteps[j].result) {
-                case 'success':
-                  jiraPlan += '|(/)|';
-                  break;
-                case 'danger':
-                  jiraPlan += '|(x)|';
-                  break;
-                default:
-                  jiraPlan += '|(?)|';
-              }
+        jiraPlan += '\n||';
+        jiraPlan += $scope.testPlan.category[i].name;
+        jiraPlan += '|| ||';
+        for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
+          jiraPlan += '\n|';
+          jiraPlan += '*Setup:* ' + $scope.testPlan.category[i].testSteps[j].setup;
+          jiraPlan += '\\\\  *Action:* ' + $scope.testPlan.category[i].testSteps[j].action;
+          jiraPlan += '\\\\  *Outcome:* ' + $scope.testPlan.category[i].testSteps[j].outcome;
+          if($scope.mode == 'run') {
+            switch($scope.testPlan.category[i].testSteps[j].result) {
+              case 'success':
+                jiraPlan += '|(/)|';
+                break;
+              case 'danger':
+                jiraPlan += '|(x)|';
+                break;
+              default:
+                jiraPlan += '|(?)|';
             }
-            else {
-              jiraPlan += '|(?)|';
-            }
-          };
+          }
+          else {
+            jiraPlan += '|(?)|';
+          }
+        };
       };
       $scope.results = jiraPlan;
     }
     else {
-      // Add error handling
     };
   };
   
@@ -131,8 +144,29 @@ tcm.controller('TestPlanCtrl', function($scope) {
       };
     }
     else {
-      // Add error handling
     }
+  };
+  
+  $scope.saveCopy = function() {
+    TestPlanFactory.addTestPlan($scope.testPlan)
+      .success(function(data) {
+        $scope.info = data.msg;
+      })
+      .error(function(data) {
+        $scope.errors = data;
+      });
+  };
+  
+  $scope.deletePlan = function(extrnId) {
+    $location.path('/');
+//    $http({
+//      method: 'DELETE',
+//      url: '/testplans/' + extrnId
+//    }).success(function(data) {
+//      
+//    }).error(function(data) {
+//      $scope.errors = data;
+//    });
   };
   
   $scope.getTotalTestCases = function() {

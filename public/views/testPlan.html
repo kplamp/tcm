@@ -10,8 +10,8 @@
     
   <ul class="nav navbar-nav menu-group" ng-show="mode=='run'">
     <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setResultAll('')">Reset All</button></li>
-    <li><button class="btn btn-success navbar-btn btn-sm" ng-click="setResultAll('success')">Pass All</button></li>
-    <li><button class="btn btn-danger navbar-btn btn-sm" ng-click="setResultAll('danger')">Fail All</button></li>
+    <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setResultAll('success')">Pass All</button></li>
+    <li><button class="btn btn-default navbar-btn btn-sm" ng-click="setResultAll('danger')">Fail All</button></li>
   </ul>
   <div class="nav navbar-nav menu-group" ng-show="mode=='run'">
     <div class="progress">
@@ -19,12 +19,19 @@
       <div class="progress-bar progress-bar-danger" style="width: {{ (getCountByStatus('danger') / getTotalTestCases()) * 100}}%">{{getCountByStatus('danger')}}</div>
     </div>
   </div>
+  
+  <ul class="nav navbar-nav menu-group pull-right">
+    <li><button class="btn btn-danger navbar-btn btn-sm" ng-click="deletePlan(testPlan.extrnId)">Delete Plan</button></li>
+  </ul>
 </div>
 
 <div class="col-md-12 testPlan">  
 
   <div ng-show="errors" class="alert alert-danger">
     {{errors}}
+  </div>
+  <div ng-show="info" class="alert alert-info">
+    {{info}}
   </div>
   <div class="test">
     <input ng-model="testPlan.extrnId" class="form-control" ng-disabled="mode=='run'" placeholder="External System ID" />
@@ -75,7 +82,8 @@
           <option value="wiki">Wiki</option>
           <option value="jira">Jira</option>
         </select>
-        <button class="btn btn-default btn-xs" ng-click="saveCopy(format)">Save</button>
+        <button class="btn btn-default btn-xs" ng-click="exportCopy(format)">Export</button>
+        <button class="btn btn-default btn-xs" ng-click="saveCopy()">Save</button>
         <button class="btn btn-default btn-xs" ng-click="loadCopy(format)" ng-show="format != 'wiki' && format != 'jira'">Load</button>
       </div>
       <textarea class="form-control" ng-model="results" placeholder="Test Plan Formatted" rows="10"></textarea>

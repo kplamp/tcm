@@ -1,0 +1,14 @@
+{
+    "name": "PRSR",
+    "description": "Test case management tool",
+    "version": "0.1.0",
+    "author": "Stephen Schroeder",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tekknoschtev/tcm.git"
+    },
+    "dependencies": {
+        "express": "latest",
+        "ejs": "latest"
+    }
+}

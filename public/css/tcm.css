@@ -29,7 +29,10 @@ td:last-child { border: none; }
     color: white;
 }
 
-.menu-group { padding-left: 20px; }
+.menu-group { 
+    padding-left: 20px; 
+    padding-right: 20px; 
+}
 
 .testCaseCell {
     background: white;

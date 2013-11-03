@@ -4,7 +4,7 @@ tcm.controller('HeaderController', function($scope) {
   $scope.menu = [
     {
       title: "Test Plans",
-      link: ""
+      link: "testplans"
     },
     {
       title: "Reports",
