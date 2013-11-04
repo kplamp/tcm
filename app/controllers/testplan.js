@@ -17,7 +17,7 @@ var samplePlan = {
   ]
 };
 
-var testPlans = [samplePlan];
+var testPlans = require('../../config/sampleTestPlans.json');
 
 exports.getAll = function(req,res) {
   res.send({testplans: testPlans});
