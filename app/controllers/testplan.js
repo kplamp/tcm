@@ -37,5 +37,11 @@ exports.addPlan = function(req,res) {
 };
 
 exports.removePlan = function(req,res) {
-  console.log(req.params.extrnId);
+  for(i=0; i<testPlans.length; i++) {
+    if(testPlans[i].extrnId == req.params.extrnId) {
+      testPlans.splice(i, 1);
+    }
+  }
+  
+  res.send(testPlans);
 };

@@ -1,10 +1,14 @@
 var tcm = angular.module('tcm');
 
-tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, TestPlanFactory) {
+tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, TestPlanFactory, $rootScope) {
+  // Reset rootScope error and information messages;
+  $rootScope.errors = '';
+  $rootScope.info = '';
+  
   $scope.mode = 'edit';
   $scope.format = '';
   $scope.results = '';
-  $scope.info = "";
+  $scope.info = '';
   var planId = $routeParams.extrnId;
   
   if(planId) {
@@ -132,7 +136,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     };
   };
   
-  $scope.loadCopy = function(format) {
+  $scope.loadCopy = function(format) {    
     if(format == 'yaml') {
       if($scope.results) {
         $scope.testPlan = YAML.parse($scope.results);
@@ -157,16 +161,17 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
       });
   };
   
-  $scope.deletePlan = function(extrnId) {
-    $location.path('/');
-//    $http({
-//      method: 'DELETE',
-//      url: '/testplans/' + extrnId
-//    }).success(function(data) {
-//      
-//    }).error(function(data) {
-//      $scope.errors = data;
-//    });
+  $scope.deletePlan = function() {
+    var testPlanIdToDelete = $scope.testPlan.extrnId;
+    TestPlanFactory.deleteTestPlan($scope.testPlan)
+      .success(function(response) {
+        $rootScope.info = "Successfully deleted " + testPlanIdToDelete;
+        $location.path('/');
+      })
+      .error(function(response) {
+        $scope.errors = response;
+        $location.path('/');
+      });
   };
   
   $scope.getTotalTestCases = function() {
