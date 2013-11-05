@@ -1,22 +1,3 @@
-var samplePlan = {
-  "extrnId": "Sample Plan",
-  "softwareChange": "Sample",
-  "testStrategy": "Sample",
-  "category": [
-    {
-      "name": "Sample",
-      "testSteps": [
-        {
-          "setup": "Sample",
-          "action": "Sample",
-          "outcome": "Sample",
-          "result": ""
-        }
-      ]
-    }
-  ]
-};
-
 var testPlans = require('../../config/sampleTestPlans.json');
 
 exports.getAll = function(req,res) {
@@ -36,6 +17,21 @@ exports.addPlan = function(req,res) {
   res.send({msg: "Successfully added testplan"});
 };
 
+exports.updatePlan = function(req,res) {
+  console.log('PRE');
+  console.log('==========');
+  console.log(testPlans);
+  for(i=0; i<testPlans.length; i++) {
+    if(testPlans[i].extrnId == req.params.extrnId) {
+      testPlans[i] = req.body.testplan;
+    }
+    else {
+      // nothing
+    }
+  }
+  res.send({msg: "Successfully updated test plan."});
+};
+
 exports.removePlan = function(req,res) {
   for(i=0; i<testPlans.length; i++) {
     if(testPlans[i].extrnId == req.params.extrnId) {
@@ -43,5 +39,5 @@ exports.removePlan = function(req,res) {
     }
   }
   
-  res.send(testPlans);
+  res.send({msg: "Successfully removed test plan."});
 };

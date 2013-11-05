@@ -152,13 +152,24 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   };
   
   $scope.saveCopy = function() {
-    TestPlanFactory.addTestPlan($scope.testPlan)
-      .success(function(data) {
-        $scope.info = data.msg;
-      })
-      .error(function(data) {
-        $scope.errors = data;
-      });
+    if(planId) {
+      TestPlanFactory.updateTestPlan($scope.testPlan)
+        .success(function(data) {
+          $scope.info = data.msg;
+        })
+        .error(function(data) {
+          $scope.errors = data;
+        })
+    }
+    else {
+      TestPlanFactory.addTestPlan($scope.testPlan)
+        .success(function(data) {
+          $location.path('testplans/' + $scope.testPlan.extrnId);
+        })
+        .error(function(data) {
+          $scope.errors = data;
+        });
+    }
   };
   
   $scope.deletePlan = function() {

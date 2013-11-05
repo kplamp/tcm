@@ -10,6 +10,9 @@ tcm.factory('TestPlanFactory', function($http) {
     addTestPlan: function(testplan) {
       return $http.post(url, {testplan: testplan});
     },
+    updateTestPlan: function(testplan) {
+      return $http.put(url + testplan.extrnId, {testplan: testplan});
+    },
     deleteTestPlan: function(testplan) {
       return $http.delete(url + testplan.extrnId);
     }

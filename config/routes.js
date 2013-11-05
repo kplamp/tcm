@@ -4,6 +4,7 @@ module.exports = function(app) {
   app.get('/testplans/:extrnId', plan.getOne);
   app.get('/testplans', plan.getAll);
   app.post('/testplans', plan.addPlan);
+  app.put('/testplans/:extrnId', plan.updatePlan);
   app.delete('/testplans/:extrnId', plan.removePlan);
   
   var about = require('../app/controllers/about');

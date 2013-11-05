@@ -34,7 +34,7 @@
     {{info}}
   </div>
   <div class="test">
-    <input ng-model="testPlan.extrnId" class="form-control" ng-disabled="mode=='run'" placeholder="External System ID" />
+    <input ng-model="testPlan.extrnId" class="form-control" ng-disabled="mode=='run' || planId != ''" placeholder="External System ID" />
     <textarea ng-model="testPlan.softwareChange" class="form-control" ng-disabled="mode=='run'" placeholder="Describe the software change being made"></textarea>
     <textarea ng-model="testPlan.testStrategy" class="form-control" ng-disabled="mode=='run'" placeholder="Describe the general test strategy, including any notes for testing."></textarea>
   </div>
