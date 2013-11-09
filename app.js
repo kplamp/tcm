@@ -9,7 +9,7 @@ require('./app/models/testplans');
 var app = express();
 
 app.configure(function() {
-  app.set('port', process.env.PORT || 3000);
+  app.set('port', process.env.PORT || 8080);
   app.engine('.html', require('ejs').__express);
   app.set('views', __dirname + '/app/views');
   app.set('view engine', 'html');
