@@ -14,7 +14,7 @@ tcm.factory('TestPlanFactory', function($http) {
       return $http.put(url + testplan.extrnId, {testplan: testplan});
     },
     deleteTestPlan: function(testplan) {
-      return $http.delete(url + testplan.extrnId);
+      return $http.delete(url + testplan._id);
     }
   };
 });

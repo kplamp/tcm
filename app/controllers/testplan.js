@@ -1,46 +1,64 @@
-var testPlans = require('../../config/sampleTestPlans.json');
+var mongoose = require('mongoose'),
+    TestPlan = mongoose.model('TestPlan');
 
 exports.getAll = function(req,res) {
-  res.send({testplans: testPlans});
+  TestPlan.find({}, function(err, testPlans) {
+    if(err) {
+      res.status(404).send(err);
+    }
+    else {
+      res.send({testplans: testPlans});
+    }
+  });
 };
 
 exports.getOne = function(req,res) {
-  for(i=0; i<testPlans.length; i++) {
-    if(testPlans[i].extrnId == req.params.extrnId) {
-      res.send({plan: testPlans[i]});
+  TestPlan.findOne({'extrnId': req.params.extrnId}, function(err, testplan) {
+    if(err) {
+      res.status(404).send(err);
     }
-  }
-  res.status(404).send('Error retrieving test plan');
+    else{
+      res.send({plan: testplan});
+    }
+  });
 };
 
 exports.addPlan = function(req,res) {
-  testPlans.push(req.body.testplan);
-  try {
-    res.send({msg: "Successfully added test plan"});
-  }
-  catch(err) {
-    res.status(404).send('Error adding plan');
-  }
+  var testplan = new TestPlan(req.body.testplan);
+  
+  testplan.save(function(err) {
+    if(err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+    else {
+      res.send({msg: "Successfully added test plan"});
+    }
+  });
 };
 
 exports.updatePlan = function(req,res) {
-  for(i=0; i<testPlans.length; i++) {
-    if(testPlans[i].extrnId == req.params.extrnId) {
-      testPlans[i] = req.body.testplan;
+  TestPlan.findOne({_id: req.body.testplan._id}, function(err, testplan) {
+    if(err) {
+      res.status(500).send({msg: "Error updating testplan: \n" + err});
     }
     else {
-      // nothing
+      testplan.softwareChange = req.body.testplan.softwareChange;
+      testplan.testStrategy = req.body.testplan.testStrategy;
+      testplan.category = req.body.testplan.category;
+      testplan.save();
+      res.status(200).send({msg: 'Successfully updated test plan.'});
     }
-  }
-  res.status(200).send({msg: "Successfully updated test plan."});
+  });
 };
 
 exports.removePlan = function(req,res) {
-  for(i=0; i<testPlans.length; i++) {
-    if(testPlans[i].extrnId == req.params.extrnId) {
-      testPlans.splice(i, 1);
+  TestPlan.remove({_id: req.params._id}, function(err) {
+    if(err) {
+      res.status(500).send({msg: "Error deleting test plan. \n" + err});
     }
-  }
-  
-  res.status(200).send({msg: "Successfully removed test plan."});
+    else {
+      res.status(200).send({msg: "Successfully deleted testplan."});
+    }
+  });
 };

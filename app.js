@@ -1,4 +1,10 @@
-var express = require('express');
+var express = require('express'),
+    mongoose = require('mongoose');
+
+var db = mongoose.connect('mongodb://localhost/prsr');
+
+//Bring in models.  If adding more, need to write a method to do this.
+require('./app/models/testplans');
 
 var app = express();
 
