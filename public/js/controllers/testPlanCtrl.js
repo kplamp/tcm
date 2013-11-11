@@ -26,7 +26,6 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   else {
     $scope.testPlan = {
       meta: {
-//        creator: '',
         createdDate: Date.now,
         modifiedDate: ''
       }, 
@@ -49,10 +48,6 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
         ]
       }
     };
-//    $scope.testPlan.details.extrnId = "";
-//    $scope.testPlan.details.softwareChange = "";
-//    $scope.testPlan.details.testStrategy = "";
-//    $scope.testPlan.details.category = [{name:'', testSteps: [{setup: '',action:'',outcome:'',result:''}]}];
   }
   
   $scope.setMode = function(mode) {
@@ -178,6 +173,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   };
   
   $scope.saveCopy = function() {
+    $scope.testPlan.meta.modifiedDate = Date.now();
     if(planId) {
       TestPlanFactory.updateTestPlan($scope.testPlan)
         .success(function(data) {
@@ -200,6 +196,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   };
   
   $scope.deletePlan = function() {
+    $scope.testPlan.meta.modifiedDate = Date.now();
     var testPlanIdToDelete = $scope.testPlan.details.extrnId;
     TestPlanFactory.deleteTestPlan($scope.testPlan)
       .success(function(response) {
