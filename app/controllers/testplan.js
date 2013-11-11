@@ -13,7 +13,7 @@ exports.getAll = function(req,res) {
 };
 
 exports.getOne = function(req,res) {
-  TestPlan.findOne({'extrnId': req.params.extrnId}, function(err, testplan) {
+  TestPlan.findOne({'details.extrnId': req.params.extrnId}, function(err, testplan) {
     if(err) {
       res.status(404).send(err);
     }
@@ -43,9 +43,9 @@ exports.updatePlan = function(req,res) {
       res.status(500).send({msg: "Error updating testplan: \n" + err});
     }
     else {
-      testplan.softwareChange = req.body.testplan.softwareChange;
-      testplan.testStrategy = req.body.testplan.testStrategy;
-      testplan.category = req.body.testplan.category;
+      testplan.details.softwareChange = req.body.testplan.details.softwareChange;
+      testplan.details.testStrategy = req.body.testplan.details.testStrategy;
+      testplan.details.category = req.body.testplan.details.category;
       testplan.save();
       res.status(200).send({msg: 'Successfully updated test plan.'});
     }

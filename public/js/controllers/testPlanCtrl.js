@@ -8,7 +8,9 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   $scope.mode = 'edit';
   $scope.format = '';
   $scope.results = '';
-  $scope.info = '';
+//  $scope.info = $rootScope.info;
+  $scope.errors = $rootScope.errors;
+  $scope.info
   var planId = $routeParams.extrnId;
   
   if(planId) {
@@ -22,11 +24,35 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     });
   }
   else {
-    $scope.testPlan = {};
-    $scope.testPlan.extrnId = "";
-    $scope.testPlan.softwareChange = "";
-    $scope.testPlan.testStrategy = "";
-    $scope.testPlan.category = [{name:'', testSteps: [{setup: '',action:'',outcome:'',result:''}]}];
+    $scope.testPlan = {
+      meta: {
+//        creator: '',
+        createdDate: Date.now,
+        modifiedDate: ''
+      }, 
+      details: {
+        extrnId: '',
+        softwareChange: '',
+        testStrategy: '',
+        category: [
+          {
+            name: '',
+            testSteps: [
+              {
+                setup: '',
+                action: '',
+                outcome: '',
+                result: ''
+              }
+            ]
+          }
+        ]
+      }
+    };
+//    $scope.testPlan.details.extrnId = "";
+//    $scope.testPlan.details.softwareChange = "";
+//    $scope.testPlan.details.testStrategy = "";
+//    $scope.testPlan.details.category = [{name:'', testSteps: [{setup: '',action:'',outcome:'',result:''}]}];
   }
   
   $scope.setMode = function(mode) {
@@ -37,38 +63,38 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   };
   
   $scope.setResult = function(category, step, result) {
-		$scope.testPlan.category[category].testSteps[step].result = result;
+		$scope.testPlan.details.category[category].testSteps[step].result = result;
   };
   
   $scope.setResultCategory = function(category, result) {
-    for(i=0; i<$scope.testPlan.category[category].testSteps.length; i++) {
-      $scope.testPlan.category[category].testSteps[i].result = result;
+    for(i=0; i<$scope.testPlan.details.category[category].testSteps.length; i++) {
+      $scope.testPlan.details.category[category].testSteps[i].result = result;
     };
   };
   
   $scope.setResultAll = function(result) {
-    for(i=0; i<$scope.testPlan.category.length; i++) {
-      for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
-        $scope.testPlan.category[i].testSteps[j].result = result;
+    for(i=0; i<$scope.testPlan.details.category.length; i++) {
+      for(j=0; j<$scope.testPlan.details.category[i].testSteps.length; j++) {
+        $scope.testPlan.details.category[i].testSteps[j].result = result;
       }
     };
   };
   
   $scope.addStep = function(index) {
-		$scope.testPlan.category[index].testSteps.push({setup: '', action: '', outcome: ''});
+		$scope.testPlan.details.category[index].testSteps.push({setup: '', action: '', outcome: ''});
   };
 	
   $scope.removeStep = function(category, step) {
-		$scope.testPlan.category[category].testSteps.splice(step, 1);
+		$scope.testPlan.details.category[category].testSteps.splice(step, 1);
   };
   
 	$scope.addCategory = function() {
     console.log($scope.testPlan);
-		$scope.testPlan.category.push({name: '', testSteps: [{setup: '', action: '', outcome: ''}]});
+		$scope.testPlan.details.category.push({name: '', testSteps: [{setup: '', action: '', outcome: ''}]});
 	};
   
 	$scope.removeCategory = function(index) {
-		$scope.testPlan.category.splice(index, 1);
+		$scope.testPlan.details.category.splice(index, 1);
 	};
   
   $scope.exportCopy = function(format) {
@@ -82,17 +108,17 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     }
     else if (format == 'wiki') {
       var wikiPlan = '';
-      wikiPlan += '^' + $scope.testPlan.extrnId;
-      wikiPlan += '\n//' + $scope.testPlan.softwareChange;
-      wikiPlan += '\n//' + $scope.testPlan.testStrategy;
-      for(i=0; i<$scope.testPlan.category.length; i++) {
+      wikiPlan += '^' + $scope.testPlan.details.extrnId;
+      wikiPlan += '\n//' + $scope.testPlan.details.softwareChange;
+      wikiPlan += '\n//' + $scope.testPlan.details.testStrategy;
+      for(i=0; i<$scope.testPlan.details.category.length; i++) {
         wikiPlan += '\n//';
-        wikiPlan += $scope.testPlan.category[i].name;
-        for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
+        wikiPlan += $scope.testPlan.details.category[i].name;
+        for(j=0; j<$scope.testPlan.details.category[i].testSteps.length; j++) {
           wikiPlan += '\n';
-          wikiPlan += '*Setup:* ' + $scope.testPlan.category[i].testSteps[j].setup;
-          wikiPlan += ' \\\\ *Action:* ' + $scope.testPlan.category[i].testSteps[j].action;
-          wikiPlan += ' \\\\ *Outcome:* ' + $scope.testPlan.category[i].testSteps[j].outcome;
+          wikiPlan += '*Setup:* ' + $scope.testPlan.details.category[i].testSteps[j].setup;
+          wikiPlan += ' \\\\ *Action:* ' + $scope.testPlan.details.category[i].testSteps[j].action;
+          wikiPlan += ' \\\\ *Outcome:* ' + $scope.testPlan.details.category[i].testSteps[j].outcome;
         };
       };
       
@@ -101,20 +127,20 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     else if (format == 'jira') {
       var jiraPlan = '';      
       
-      jiraPlan += '||' + $scope.testPlan.extrnId + '|| ||';
-      jiraPlan += '\n||' + $scope.testPlan.softwareChange + '|| ||';
-      jiraPlan += '\n||' + $scope.testPlan.testStrategy + '|| ||';
-      for(i=0; i<$scope.testPlan.category.length; i++) {
+      jiraPlan += '||' + $scope.testPlan.details.extrnId + '|| ||';
+      jiraPlan += '\n||' + $scope.testPlan.details.softwareChange + '|| ||';
+      jiraPlan += '\n||' + $scope.testPlan.details.testStrategy + '|| ||';
+      for(i=0; i<$scope.testPlan.details.category.length; i++) {
         jiraPlan += '\n||';
-        jiraPlan += $scope.testPlan.category[i].name;
+        jiraPlan += $scope.testPlan.details.category[i].name;
         jiraPlan += '|| ||';
-        for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
+        for(j=0; j<$scope.testPlan.details.category[i].testSteps.length; j++) {
           jiraPlan += '\n|';
-          jiraPlan += '*Setup:* ' + $scope.testPlan.category[i].testSteps[j].setup;
-          jiraPlan += '\\\\  *Action:* ' + $scope.testPlan.category[i].testSteps[j].action;
-          jiraPlan += '\\\\  *Outcome:* ' + $scope.testPlan.category[i].testSteps[j].outcome;
+          jiraPlan += '*Setup:* ' + $scope.testPlan.details.category[i].testSteps[j].setup;
+          jiraPlan += '\\\\  *Action:* ' + $scope.testPlan.details.category[i].testSteps[j].action;
+          jiraPlan += '\\\\  *Outcome:* ' + $scope.testPlan.details.category[i].testSteps[j].outcome;
           if($scope.mode == 'run') {
-            switch($scope.testPlan.category[i].testSteps[j].result) {
+            switch($scope.testPlan.details.category[i].testSteps[j].result) {
               case 'success':
                 jiraPlan += '|(/)|';
                 break;
@@ -164,7 +190,8 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     else {
       TestPlanFactory.addTestPlan($scope.testPlan)
         .success(function(data) {
-          $location.path('testplans/' + $scope.testPlan.extrnId);
+          $location.path('testplans/' + $scope.testPlan.details.extrnId);
+          $scope.info = "Successfully added \n\n\n\n" + $scope.testPlan.details.extrnId;
         })
         .error(function(data) {
           $scope.errors = data;
@@ -173,7 +200,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   };
   
   $scope.deletePlan = function() {
-    var testPlanIdToDelete = $scope.testPlan.extrnId;
+    var testPlanIdToDelete = $scope.testPlan.details.extrnId;
     TestPlanFactory.deleteTestPlan($scope.testPlan)
       .success(function(response) {
         $rootScope.info = "Successfully deleted " + testPlanIdToDelete;
@@ -187,8 +214,8 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   
   $scope.getTotalTestCases = function() {
     count = 0;
-    for(i=0; i<$scope.testPlan.category.length; i++) {
-      for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
+    for(i=0; i<$scope.testPlan.details.category.length; i++) {
+      for(j=0; j<$scope.testPlan.details.category[i].testSteps.length; j++) {
         count ++;
       }
     }
@@ -197,9 +224,9 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   
   $scope.getCountByStatus = function(status) {
     count = 0;
-    for(i=0; i<$scope.testPlan.category.length; i++) {
-      for(j=0; j<$scope.testPlan.category[i].testSteps.length; j++) {
-        if($scope.testPlan.category[i].testSteps[j].result == status) {
+    for(i=0; i<$scope.testPlan.details.category.length; i++) {
+      for(j=0; j<$scope.testPlan.details.category[i].testSteps.length; j++) {
+        if($scope.testPlan.details.category[i].testSteps[j].result == status) {
           count ++;
         }
       }
@@ -208,9 +235,14 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   };
   
   function _removeHashKey(key, value) {
-    if(key == "$$hashKey") {
+    if(key == "$$hashKey" || key == "_id" || key == "__v") {
       return undefined;
     }
     else return value;
+  }
+  
+  $scope.getDate = function(date) {
+    var newDate = new Date(date);
+    return newDate.toDateString();
   }
 });
