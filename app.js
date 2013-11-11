@@ -1,5 +1,6 @@
 var express = require('express'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    fs = require('fs');
 
 var db = mongoose.connect('mongodb://localhost/prsr');
 
@@ -8,8 +9,12 @@ require('./app/models/testplans');
 
 var app = express();
 
+var logFile = fs.createWriteStream('./logs/log_' + Date.now(), {flags: 'a'});
+
 app.configure(function() {
   app.set('port', process.env.PORT || 8080);
+  app.set('showStackError', true);
+  app.use(express.logger({stream: logFile}));
   app.engine('.html', require('ejs').__express);
   app.set('views', __dirname + '/app/views');
   app.set('view engine', 'html');
