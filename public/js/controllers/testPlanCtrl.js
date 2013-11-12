@@ -185,7 +185,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     else {
       TestPlanFactory.addTestPlan($scope.testPlan)
               .success(function(data) {
-                $location.path('testplans/' + $scope.testPlan.details.extrnId);
+                $location.path('testplans/plan/' + $scope.testPlan.details.extrnId);
         $scope.info = "Successfully added \n\n\n\n" + $scope.testPlan.details.extrnId;
       })
               .error(function(data) {
@@ -204,7 +204,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     })
             .error(function(response) {
               $scope.errors = response;
-      $location.path('/');
+      $location.path('/testplans');
     });
   };
   
