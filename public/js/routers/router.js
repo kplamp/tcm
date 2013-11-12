@@ -4,15 +4,18 @@ tcm.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'IndexCtrl'
+        templateUrl: 'views/main.html'
       })
       .when('/testplans', {
-        templateUrl: 'views/testPlan.html',
+        templateUrl: 'views/testplans/main.html',
+        controller: 'IndexCtrl'
+      })
+      .when('/testplans/plan/', {
+        templateUrl: 'views/testplans/testPlan.html',
         controller: 'TestPlanCtrl'
       })
-      .when('/testplans/:extrnId', {
-        templateUrl: 'views/testPlan.html',
+      .when('/testplans/plan/:extrnId', {
+        templateUrl: 'views/testplans/testPlan.html',
         controller: 'TestPlanCtrl'
       })
       .when('/about', {
