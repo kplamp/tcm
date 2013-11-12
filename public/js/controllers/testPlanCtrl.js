@@ -8,11 +8,10 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   $scope.mode = 'edit';
   $scope.format = '';
   $scope.results = '';
-//  $scope.info = $rootScope.info;
+  $scope.info = $rootScope.info;
   $scope.errors = $rootScope.errors;
-  $scope.info
   var planId = $routeParams.extrnId;
-  
+
   if(planId) {
     $http({
       method: 'GET',
@@ -176,22 +175,22 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     $scope.testPlan.meta.modifiedDate = Date.now();
     if(planId) {
       TestPlanFactory.updateTestPlan($scope.testPlan)
-        .success(function(data) {
-          $scope.info = data.msg;
-        })
-        .error(function(data) {
-          $scope.errors = data;
-        })
+              .success(function(data) {
+                $scope.info = data.msg;
+      })
+              .error(function(data) {
+                $scope.errors = data;
+      })
     }
     else {
       TestPlanFactory.addTestPlan($scope.testPlan)
-        .success(function(data) {
-          $location.path('testplans/' + $scope.testPlan.details.extrnId);
-          $scope.info = "Successfully added \n\n\n\n" + $scope.testPlan.details.extrnId;
-        })
-        .error(function(data) {
-          $scope.errors = data;
-        });
+              .success(function(data) {
+                $location.path('testplans/' + $scope.testPlan.details.extrnId);
+        $scope.info = "Successfully added \n\n\n\n" + $scope.testPlan.details.extrnId;
+      })
+              .error(function(data) {
+                $scope.errors = data;
+      });
     }
   };
   
@@ -199,14 +198,14 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     $scope.testPlan.meta.modifiedDate = Date.now();
     var testPlanIdToDelete = $scope.testPlan.details.extrnId;
     TestPlanFactory.deleteTestPlan($scope.testPlan)
-      .success(function(response) {
-        $rootScope.info = "Successfully deleted " + testPlanIdToDelete;
-        $location.path('/');
-      })
-      .error(function(response) {
-        $scope.errors = response;
-        $location.path('/');
-      });
+            .success(function(response) {
+              $rootScope.info = "Successfully deleted " + testPlanIdToDelete;
+      $location.path('/');
+    })
+            .error(function(response) {
+              $scope.errors = response;
+      $location.path('/');
+    });
   };
   
   $scope.getTotalTestCases = function() {
