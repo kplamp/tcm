@@ -83,7 +83,6 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   };
   
 	$scope.addCategory = function() {
-    console.log($scope.testPlan);
 		$scope.testPlan.details.category.push({name: '', testSteps: [{setup: '', action: '', outcome: ''}]});
 	};
   
@@ -200,7 +199,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     TestPlanFactory.deleteTestPlan($scope.testPlan)
             .success(function(response) {
               $rootScope.info = "Successfully deleted " + testPlanIdToDelete;
-      $location.path('/');
+      $location.path('/testplans');
     })
             .error(function(response) {
               $scope.errors = response;
