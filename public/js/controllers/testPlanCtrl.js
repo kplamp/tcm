@@ -12,7 +12,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   $scope.errors = $rootScope.errors;
   var planId = $routeParams.extrnId;
   var plan_Id = '';
-
+  
   if(planId) {
     $http({
       method: 'GET',
@@ -25,30 +25,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     });
   }
   else {
-    $scope.testPlan = {
-      meta: {
-        createdDate: Date.now,
-        modifiedDate: ''
-      }, 
-      details: {
-        extrnId: '',
-        softwareChange: '',
-        testStrategy: '',
-        category: [
-          {
-            name: '',
-            testSteps: [
-              {
-                setup: '',
-                action: '',
-                outcome: '',
-                result: ''
-              }
-            ]
-          }
-        ]
-      }
-    };
+    $scope.testPlan = _init();
   }
   
   $scope.setMode = function(mode) {
@@ -93,68 +70,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
 	};
   
   $scope.exportCopy = function(format) {
-    if(format == 'yaml') {
-      var cleanedJson = JSON.stringify($scope.testPlan, _removeHashKey);
-      cleanedJson = JSON.parse(cleanedJson);
-      $scope.results = YAML.stringify(cleanedJson, 10);
-    }
-    else if (format == 'json') {
-      $scope.results = angular.toJson($scope.testPlan, true);
-    }
-    else if (format == 'wiki') {
-      var wikiPlan = '';
-      wikiPlan += '^' + $scope.testPlan.details.extrnId;
-      wikiPlan += '\n//' + $scope.testPlan.details.softwareChange;
-      wikiPlan += '\n//' + $scope.testPlan.details.testStrategy;
-      for(i=0; i<$scope.testPlan.details.category.length; i++) {
-        wikiPlan += '\n//';
-        wikiPlan += $scope.testPlan.details.category[i].name;
-        for(j=0; j<$scope.testPlan.details.category[i].testSteps.length; j++) {
-          wikiPlan += '\n';
-          wikiPlan += '*Setup:* ' + $scope.testPlan.details.category[i].testSteps[j].setup;
-          wikiPlan += ' \\\\ *Action:* ' + $scope.testPlan.details.category[i].testSteps[j].action;
-          wikiPlan += ' \\\\ *Outcome:* ' + $scope.testPlan.details.category[i].testSteps[j].outcome;
-        };
-      };
-      
-      $scope.results = wikiPlan;
-    }
-    else if (format == 'jira') {
-      var jiraPlan = '';      
-      
-      jiraPlan += '||' + $scope.testPlan.details.extrnId + '|| ||';
-      jiraPlan += '\n||' + $scope.testPlan.details.softwareChange + '|| ||';
-      jiraPlan += '\n||' + $scope.testPlan.details.testStrategy + '|| ||';
-      for(i=0; i<$scope.testPlan.details.category.length; i++) {
-        jiraPlan += '\n||';
-        jiraPlan += $scope.testPlan.details.category[i].name;
-        jiraPlan += '|| ||';
-        for(j=0; j<$scope.testPlan.details.category[i].testSteps.length; j++) {
-          jiraPlan += '\n|';
-          jiraPlan += '*Setup:* ' + $scope.testPlan.details.category[i].testSteps[j].setup;
-          jiraPlan += '\\\\  *Action:* ' + $scope.testPlan.details.category[i].testSteps[j].action;
-          jiraPlan += '\\\\  *Outcome:* ' + $scope.testPlan.details.category[i].testSteps[j].outcome;
-          if($scope.mode == 'run') {
-            switch($scope.testPlan.details.category[i].testSteps[j].result) {
-              case 'success':
-                jiraPlan += '|(/)|';
-                break;
-              case 'danger':
-                jiraPlan += '|(x)|';
-                break;
-              default:
-                jiraPlan += '|(?)|';
-            }
-          }
-          else {
-            jiraPlan += '|(?)|';
-          }
-        };
-      };
-      $scope.results = jiraPlan;
-    }
-    else {
-    };
+    $scope.results = _exportFormat(format, $scope.testPlan);
   };
   
   $scope.loadCopy = function(format) {    
@@ -232,6 +148,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     return count;
   };
   
+  // Removes unnecessary key/value pairs from the exported test plan.
   function _removeHashKey(key, value) {
     if(key == "$$hashKey" || key == "_id" || key == "__v") {
       return undefined;
@@ -239,8 +156,99 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     else return value;
   }
   
-  $scope.getDate = function(date) {
-    var newDate = new Date(date);
-    return newDate.toDateString();
+  function _exportFormat(format, testPlan) {
+    if(format == 'yaml') {
+      var cleanedJson = JSON.stringify($scope.testPlan, _removeHashKey);
+      cleanedJson = JSON.parse(cleanedJson);
+      return YAML.stringify(cleanedJson, 10);
+    }
+    else if (format == 'json') {
+      var cleanedJson = JSON.stringify($scope.testPlan, _removeHashKey);
+      cleanedJson = JSON.parse(cleanedJson)
+      return angular.toJson(cleanedJson, true);
+    }
+    else if (format == 'wiki') {
+      var wikiPlan = '';
+      wikiPlan += '^' + $scope.testPlan.details.extrnId;
+      wikiPlan += '\n//' + $scope.testPlan.details.softwareChange;
+      wikiPlan += '\n//' + $scope.testPlan.details.testStrategy;
+      for(i=0; i<$scope.testPlan.details.category.length; i++) {
+        wikiPlan += '\n//';
+        wikiPlan += $scope.testPlan.details.category[i].name;
+        for(j=0; j<$scope.testPlan.details.category[i].testSteps.length; j++) {
+          wikiPlan += '\n';
+          wikiPlan += '*Setup:* ' + $scope.testPlan.details.category[i].testSteps[j].setup;
+          wikiPlan += ' \\\\ *Action:* ' + $scope.testPlan.details.category[i].testSteps[j].action;
+          wikiPlan += ' \\\\ *Outcome:* ' + $scope.testPlan.details.category[i].testSteps[j].outcome;
+        };
+      };
+      
+      return wikiPlan;
+    }
+    else if (format == 'jira') {
+      var jiraPlan = '';      
+      
+      jiraPlan += '||' + $scope.testPlan.details.extrnId + '|| ||';
+      jiraPlan += '\n||' + $scope.testPlan.details.softwareChange + '|| ||';
+      jiraPlan += '\n||' + $scope.testPlan.details.testStrategy + '|| ||';
+      for(i=0; i<$scope.testPlan.details.category.length; i++) {
+        jiraPlan += '\n||';
+        jiraPlan += $scope.testPlan.details.category[i].name;
+        jiraPlan += '|| ||';
+        for(j=0; j<$scope.testPlan.details.category[i].testSteps.length; j++) {
+          jiraPlan += '\n|';
+          jiraPlan += '*Setup:* ' + $scope.testPlan.details.category[i].testSteps[j].setup;
+          jiraPlan += '\\\\  *Action:* ' + $scope.testPlan.details.category[i].testSteps[j].action;
+          jiraPlan += '\\\\  *Outcome:* ' + $scope.testPlan.details.category[i].testSteps[j].outcome;
+          if($scope.mode == 'run') {
+            switch($scope.testPlan.details.category[i].testSteps[j].result) {
+              case 'success':
+                jiraPlan += '|(/)|';
+                break;
+              case 'danger':
+                jiraPlan += '|(x)|';
+                break;
+              default:
+                jiraPlan += '|(?)|';
+            }
+          }
+          else {
+            jiraPlan += '|(?)|';
+          }
+        };
+      };
+      return jiraPlan;
+    }
+    else {
+      return "Error formatting test plan for export.";
+    }
+  };
+  
+  function _init() {
+    var newTestPlan = {
+      meta: {
+        createdDate: Date.now,
+        modifiedDate: ''
+      }, 
+      details: {
+        extrnId: '',
+        softwareChange: '',
+        testStrategy: '',
+        category: [
+          {
+            name: '',
+            testSteps: [
+              {
+                setup: '',
+                action: '',
+                outcome: '',
+                result: ''
+              }
+            ]
+          }
+        ]
+      }
+    };
+    return newTestPlan;
   }
 });
