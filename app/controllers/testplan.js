@@ -1,5 +1,5 @@
 var mongoose = require('mongoose'),
-    TestPlan = mongoose.model('TestPlan');
+        TestPlan = mongoose.model('TestPlan');
 
 exports.getAll = function(req,res) {
   TestPlan.find({}, function(err, testPlans) {
@@ -24,20 +24,25 @@ exports.getOne = function(req,res) {
 };
 
 exports.addPlan = function(req,res) {
-  var testplan = new TestPlan(req.body.testplan);
-  
-  testplan.save(function(err) {
-    if(err) {
-      console.log(err);
-      res.status(500).send(err);
-    }
-    else {
-      res.send({msg: "Successfully added test plan"});
-    }
-  });
+  try {
+    var testplan = new TestPlan(req.body.testplan);
+    testplan.save(function(err) {
+      if(err) {
+        console.log(err);
+        res.status(500).send(err);
+      }
+      else {
+        res.send({msg: "Successfully added test plan"});
+      }
+    });
+  }
+  catch(e) {
+    res.status(500).send(e);
+  }
 };
 
 exports.updatePlan = function(req,res) {
+  console.log("Id: " + req.body.testplan._id);
   TestPlan.findOne({_id: req.body.testplan._id}, function(err, testplan) {
     if(err) {
       res.status(500).send({msg: "Error updating testplan: \n" + err});

@@ -11,6 +11,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   $scope.info = $rootScope.info;
   $scope.errors = $rootScope.errors;
   var planId = $routeParams.extrnId;
+  var plan_Id = '';
 
   if(planId) {
     $http({
@@ -18,6 +19,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
       url: '/testplans/' + planId
     }).success( function(data, status, headers, config) {
       $scope.testPlan = data.plan;
+      plan_Id = data.plan._id;
     }).error( function(data, status, headers, config) {
       $scope.errors = 'Error retrieving plan ' + planId;
     });
@@ -172,6 +174,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   
   $scope.saveCopy = function() {
     $scope.testPlan.meta.modifiedDate = Date.now();
+    $scope.testPlan._id = plan_Id ? plan_Id : null;
     if(planId) {
       TestPlanFactory.updateTestPlan($scope.testPlan)
               .success(function(data) {
