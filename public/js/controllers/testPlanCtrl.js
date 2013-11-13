@@ -23,7 +23,9 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
         plan_Id = data.plan._id;
       }
       else {
+        $scope.testPlan = _init();
         $scope.errors = 'Error retrieving plan ' + planId;
+        planId = null;
       }
     }).error( function(data, status, headers, config) {
     console.log("Test1");  
