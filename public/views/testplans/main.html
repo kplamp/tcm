@@ -27,7 +27,7 @@
   </div>
   <div class="col-md-8">
     <div class="panel-group" id="accordion">
-      <div class="panel panel-default" ng-repeat="plan in testPlans | filter:orderBy(plan.meta.createdDate) | filter:searchText">
+      <div class="panel panel-default" ng-repeat="plan in testPlans | filter:!plan.meta.active | filter:orderBy(-plan.meta.createdDate) | filter:searchText">
         <div class="panel-heading">
           <p class="panel-title planDetails">
             <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{$index+1}}">

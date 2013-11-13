@@ -18,10 +18,17 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
       method: 'GET',
       url: '/testplans/' + planId
     }).success( function(data, status, headers, config) {
-      $scope.testPlan = data.plan;
-      plan_Id = data.plan._id;
+      console.log(data)
+      if(data.plan != null) {
+        $scope.testPlan = data.plan;
+        plan_Id = data.plan._id;
+      }
+      else {
+        $scope.errors = 'Error retrieving plan ' + planId;
+      }
     }).error( function(data, status, headers, config) {
-      $scope.errors = 'Error retrieving plan ' + planId;
+    console.log("Test1");  
+    $scope.errors = 'Error retrieving plan ' + planId;
     });
   }
   else {
@@ -98,7 +105,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
       })
               .error(function(data) {
                 $scope.errors = data;
-      })
+      });
     }
     else {
       TestPlanFactory.addTestPlan($scope.testPlan)
@@ -110,6 +117,23 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
                 $scope.errors = data;
       });
     }
+  };
+  
+  $scope.setPlanSatatus = function(status) {
+    $scope.testPlan.meta.active = status;
+    $scope.testPlan.meta.modifiedDate = Date.now();
+    $scope.testPlan._id = plan_Id ? plan_Id : null;
+    if(planId) {
+      TestPlanFactory.updateTestPlan($scope.testPlan)
+              .success(function(data) {
+                console.log($scope.testPlan.meta.active);
+                $rootScope.info = "Successfully inactivated testplan " + $scope.testPlan.details.extrnId;
+        $location.path('/testplans');
+      })
+              .error(function(data) {
+                $scope.errors = data;
+      });
+    };
   };
   
   $scope.deletePlan = function() {

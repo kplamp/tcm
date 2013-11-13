@@ -29,9 +29,10 @@
         <div class="progress-bar progress-bar-danger" style="width: {{ (getCountByStatus('danger') / getTotalTestCases()) * 100}}%">{{getCountByStatus('danger')}}</div>
       </div>
     </div>
-
-    <ul class="nav navbar-nav menu-group navbar-right">
-      <li><button class="btn btn-default navbar-btn btn-sm" ng-click="deletePlan()">Delete Plan</button></li>
+    <ul class="nav navbar-nav menu-group navbar-right" ng-show="testPlan.details.extrnId != null">
+      <li ng-show="testPlan.meta.active == true"><button class="btn btn-default navbar-btn btn-sm" ng-click="setPlanSatatus(false)">Inactivate</li>
+      <li ng-show="testPlan.meta.active == false"><button class="btn btn-default navbar-btn btn-sm" ng-click="setPlanSatatus(true)">Activate</li>
+      <li ng-show="testPlan.meta.active == false"><button class="btn btn-default navbar-btn btn-sm" ng-click="deletePlan()">Delete Plan</button></li>
     </ul>
   </div>
 </div>
@@ -42,7 +43,7 @@
     {{errors}}
   </div>
   <div ng-show="info" class="alert alert-info">
-    {{info}}
+    {{info}} {{ planId }}
   </div>
   <div>
     <input ng-model="testPlan.details.extrnId" class="form-control" ng-disabled="mode=='run'" placeholder="External System ID" />

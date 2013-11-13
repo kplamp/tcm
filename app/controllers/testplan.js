@@ -42,15 +42,13 @@ exports.addPlan = function(req,res) {
 };
 
 exports.updatePlan = function(req,res) {
-  console.log("Id: " + req.body.testplan._id);
   TestPlan.findOne({_id: req.body.testplan._id}, function(err, testplan) {
     if(err) {
       res.status(500).send({msg: "Error updating testplan: \n" + err});
     }
     else {
-      testplan.details.softwareChange = req.body.testplan.details.softwareChange;
-      testplan.details.testStrategy = req.body.testplan.details.testStrategy;
-      testplan.details.category = req.body.testplan.details.category;
+      testplan.meta = req.body.testplan.meta;
+      testplan.details = req.body.testplan.details;
       testplan.save();
       res.status(200).send({msg: 'Successfully updated test plan.'});
     }
