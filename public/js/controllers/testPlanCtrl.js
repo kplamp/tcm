@@ -2,8 +2,8 @@ var tcm = angular.module('tcm');
 
 tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, TestPlanFactory, $rootScope) {
   // Reset rootScope error and information messages;
-  $rootScope.errors = '';
-  $rootScope.info = '';
+//  $rootScope.errors = '';
+//  $rootScope.info = '';
   
   $scope.mode = 'edit';
   $scope.format = '';
@@ -28,7 +28,6 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
         planId = null;
       }
     }).error( function(data, status, headers, config) {
-    console.log("Test1");  
     $scope.errors = 'Error retrieving plan ' + planId;
     });
   }
@@ -93,6 +92,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
       };
     }
     else {
+      $scope.errors = "No valid import type selected to load";
     }
   };
   
@@ -109,14 +109,19 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
       });
     }
     else {
-      TestPlanFactory.addTestPlan($scope.testPlan)
-              .success(function(data) {
-                $location.path('testplans/plan/' + $scope.testPlan.details.extrnId);
+      if($scope.testPlan.details.extrnId) {
+        TestPlanFactory.addTestPlan($scope.testPlan)
+                .success(function(data) {
+                  $location.path('testplans/plan/' + $scope.testPlan.details.extrnId);
         $scope.info = "Successfully added \n\n\n\n" + $scope.testPlan.details.extrnId;
-      })
-              .error(function(data) {
-                $scope.errors = data;
-      });
+        })
+                .error(function(data) {
+                  $scope.errors = data;
+        });
+      }
+      else {
+        $scope.errors = "External System ID Cannot Be Null";
+      }
     }
   };
   
@@ -127,7 +132,6 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     if(planId) {
       TestPlanFactory.updateTestPlan($scope.testPlan)
               .success(function(data) {
-                console.log($scope.testPlan.meta.active);
                 $rootScope.info = "Successfully inactivated testplan " + $scope.testPlan.details.extrnId;
         $location.path('/testplans');
       })
@@ -245,7 +249,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
       return jiraPlan;
     }
     else {
-      return "Error formatting test plan for export.";
+      $scope.errors = "No valid type selected to export";
     }
   };
   
