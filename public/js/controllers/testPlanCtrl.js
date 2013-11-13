@@ -18,7 +18,6 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
       method: 'GET',
       url: '/testplans/' + planId
     }).success( function(data, status, headers, config) {
-      console.log(data)
       if(data.plan != null) {
         $scope.testPlan = data.plan;
         plan_Id = data.plan._id;
