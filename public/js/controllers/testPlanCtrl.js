@@ -83,12 +83,23 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   $scope.loadCopy = function(format) {    
     if(format == 'yaml') {
       if($scope.results) {
-        $scope.testPlan = YAML.parse($scope.results);
+        try {
+          $scope.testPlan = YAML.parse($scope.results);
+          $scope.info = "Successfully imported test plan.";
+          $scope.results = '';
+          $location.path();
+        }
+        catch (e) { $scope.errors = e; }
       }
     }
     else if(format == 'json') {
       if($scope.results) {
-        $scope.testPlan = JSON.parse($scope.results);
+        try {
+          $scope.testPlan = JSON.parse($scope.results);
+          $scope.info = "Successfully imported test plan.";
+          $scope.results = '';
+        }
+        catch (e) { $scope.errors = e; }
       };
     }
     else {
@@ -100,24 +111,34 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     $scope.testPlan.meta.modifiedDate = Date.now();
     $scope.testPlan._id = plan_Id ? plan_Id : null;
     if(planId) {
-      TestPlanFactory.updateTestPlan($scope.testPlan)
-              .success(function(data) {
-                $scope.info = data.msg;
-      })
-              .error(function(data) {
-                $scope.errors = data;
-      });
-    }
-    else {
-      if($scope.testPlan.details.extrnId) {
-        TestPlanFactory.addTestPlan($scope.testPlan)
+      try {
+        TestPlanFactory.updateTestPlan($scope.testPlan)
                 .success(function(data) {
-                  $location.path('testplans/plan/' + $scope.testPlan.details.extrnId);
-        $scope.info = "Successfully added \n\n\n\n" + $scope.testPlan.details.extrnId;
+                  $scope.info = data.msg;
         })
                 .error(function(data) {
                   $scope.errors = data;
         });
+      }
+      catch (e) {
+        $scope.errors = e;
+      }
+    }
+    else {
+      if($scope.testPlan.details.extrnId) {
+        try {
+          TestPlanFactory.addTestPlan($scope.testPlan)
+                  .success(function(data) {
+                    $location.path('testplans/plan/' + $scope.testPlan.details.extrnId);
+          $scope.info = "Successfully added \n\n\n\n" + $scope.testPlan.details.extrnId;
+          })
+                  .error(function(data) {
+                    $scope.errors = data;
+          });
+        }
+        catch (e) {
+          $scope.errors = e;
+        }
       }
       else {
         $scope.errors = "External System ID Cannot Be Null";
@@ -130,14 +151,19 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
     $scope.testPlan.meta.modifiedDate = Date.now();
     $scope.testPlan._id = plan_Id ? plan_Id : null;
     if(planId) {
-      TestPlanFactory.updateTestPlan($scope.testPlan)
-              .success(function(data) {
-                $rootScope.info = "Successfully inactivated testplan " + $scope.testPlan.details.extrnId;
-        $location.path('/testplans');
-      })
-              .error(function(data) {
-                $scope.errors = data;
-      });
+      try {
+        TestPlanFactory.updateTestPlan($scope.testPlan)
+                .success(function(data) {
+                  $rootScope.info = "Successfully inactivated testplan " + $scope.testPlan.details.extrnId;
+          $location.path('/testplans');
+        })
+                .error(function(data) {
+                  $scope.errors = data;
+        });
+      }
+      catch (e) {
+        $scope.errors = e;
+      }
     };
   };
   
