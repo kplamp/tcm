@@ -205,7 +205,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
   
   // Removes unnecessary key/value pairs from the exported test plan.
   function _removeHashKey(key, value) {
-    if(key == "$$hashKey" || key == "_id" || key == "__v") {
+    if(key == "$$hashKey" || key == "_id" || key == "__v" || key == 'result') {
       return undefined;
     }
     else return value;
