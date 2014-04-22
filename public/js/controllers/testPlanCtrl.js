@@ -228,7 +228,7 @@ tcm.controller('TestPlanCtrl', function($scope, $http, $routeParams, $location, 
       wikiPlan += '\n//' + $scope.testPlan.details.softwareChange;
       wikiPlan += '\n//' + $scope.testPlan.details.testStrategy;
       for(i=0; i<$scope.testPlan.details.category.length; i++) {
-        wikiPlan += '\n//';
+        wikiPlan += '\n^';
         wikiPlan += $scope.testPlan.details.category[i].name;
         for(j=0; j<$scope.testPlan.details.category[i].testSteps.length; j++) {
           wikiPlan += '\n';
